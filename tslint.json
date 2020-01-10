@@ -1,0 +1,28 @@
+{
+    "extends": [
+        "tslint:recommended",
+        "tslint-plugin-prettier",
+        "tslint-config-prettier",
+        "tslint-etc"
+    ],
+    "jsRules": {
+    },
+    "rules": {
+        "max-line-length": null,
+        "member-access": [
+            true,
+            "check-accessor",
+            "check-constructor",
+            "check-parameter-property"
+        ],
+        "no-console": false,
+        "no-unused-declaration": true,
+        "prettier": true,
+        "variable-name": {
+            "options": [
+                "allow-leading-underscore"
+            ]
+        }
+    },
+    "rulesDirectory": []
+}
