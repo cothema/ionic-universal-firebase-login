@@ -16,6 +16,7 @@
             "check-parameter-property"
         ],
         "no-console": false,
+        "no-empty-interface": false,
         "no-unused-declaration": true,
         "prettier": true,
         "variable-name": {

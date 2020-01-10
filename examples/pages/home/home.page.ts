@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../src/services/auth.service';
 
 @Component({
-    selector: 'app-login-page',
-    templateUrl: './login.page.html',
+    selector: 'app-home-page',
+    templateUrl: './home.page.html',
     styleUrls: [],
 })
-export class LoginPage {
+export class HomePage {
 
     public constructor(
         public afAuth: AngularFireAuth,

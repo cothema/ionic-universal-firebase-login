@@ -1,6 +1,6 @@
 <ion-content>
     <div *ngIf="(afAuth.authState | async); signInOptions">
-        <ion-chip *ngIf="auth.getUser() | async as user" routerLink="/">
+        <ion-chip *ngIf="auth.getUser() | async as user">
             <ion-avatar>
                 <img [src]="user.photoURL">
             </ion-avatar>

@@ -3,7 +3,7 @@ import { GooglePlus } from "@ionic-native/google-plus/ngx";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
 import { AbstractAuthentication } from "./abstract-authentication";
-import { IAuthProvider } from "./i-auth-provider.interface";
+import { IAuthProvider } from "./i-auth-provider";
 
 export class TwitterAuthentication extends AbstractAuthentication
     implements IAuthProvider {

@@ -1,4 +1,3 @@
-import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import {
     AngularFirestore,
@@ -15,11 +14,9 @@ import { FirebaseUserModel } from "../model/firebase-user.model";
 import { UserModel } from "../model/user.model";
 import { FacebookAuthentication } from "../providers/facebook-authentication";
 import { GoogleAuthentication } from "../providers/google-authentication";
+import { IAuthOptions } from "./i-auth-options";
 import { IAuthService } from "./i-auth-service";
 
-@Injectable({
-    providedIn: "root",
-})
 export class AuthService<User extends UserModel = UserModel>
     implements IAuthService {
     public loginPage = "/login";
@@ -28,8 +25,7 @@ export class AuthService<User extends UserModel = UserModel>
     public firestoreOptions = {
         userTable: "users",
     };
-    public authOptions = {
-        facebook: {},
+    public authOptions: IAuthOptions = {
         google: {
             offline: true,
             scopes: "profile email",
