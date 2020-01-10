@@ -21,6 +21,10 @@ npm install ionic-universal-firebase-login --save
 
 ### Facebook
 
+## Example implementations
+
+See examples/ folder
+
 ## Changelog
 
 [See CHANGELOG.md](CHANGELOG.md)
