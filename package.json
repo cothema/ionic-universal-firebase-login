@@ -1,12 +1,15 @@
 {
     "name": "ionic-universal-firebase-login",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "description": "Easy to use universal (browser, Android, iOS) authentication via Firebase for Ionic",
     "author": "Miloš Havlíček",
     "license": "MIT",
+    "main": "dist/index.js",
     "scripts": {
         "build": "tsc -p .",
-        "lint": "tslint -p . --fix"
+        "lint": "tslint -p . --fix",
+        "publish:prepare": "rm -rf dist && mkdir dist && cp package.json dist/package.json",
+        "publish": "npm run publish:prepare && npm version patch && npm publish"
     },
     "keywords": [
         "ionic",

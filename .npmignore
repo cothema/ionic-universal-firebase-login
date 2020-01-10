@@ -1,3 +1,10 @@
+# Tests
+**/*.spec.ts
+
+# Editor settings
+.editorconfig
 .idea/
+
+# Other
 node_modules/
 examples/
