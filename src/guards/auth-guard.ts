@@ -1,3 +1,4 @@
+import { Injectable } from "@angular/core";
 import {
     ActivatedRouteSnapshot,
     CanActivate,
@@ -9,6 +10,7 @@ import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
 import { BaseAuthService } from "../services/base-auth-service";
 
+@Injectable()
 export class AuthGuard implements CanActivate {
     public loginPage = "/login";
 

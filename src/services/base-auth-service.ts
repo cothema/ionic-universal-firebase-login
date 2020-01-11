@@ -1,3 +1,4 @@
+import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import {
     AngularFirestore,
@@ -17,6 +18,7 @@ import { GoogleAuthentication } from "../providers/google-authentication";
 import { IAuthOptions } from "./i-auth-options";
 import { IAuthService } from "./i-auth-service";
 
+@Injectable()
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
     public loginPage = "/login";
