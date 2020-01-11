@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../src/services/auth.service';
+import { BaseAuthService } from '../../../src/services/base-auth-service';
 
 @Component({
     selector: 'app-login-page',
@@ -13,7 +13,7 @@ export class LoginPage {
     public constructor(
         public afAuth: AngularFireAuth,
         private router: Router,
-        private auth: AuthService,
+        private auth: BaseAuthService,
     ) {
     }
 

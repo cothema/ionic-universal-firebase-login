@@ -4,7 +4,6 @@
     "description": "Easy to use universal (browser, Android, iOS) authentication via Firebase for Ionic",
     "author": "Miloš Havlíček",
     "license": "MIT",
-    "main": "src/index.ts",
     "repository": "https://github.com/cothema/ionic-universal-firebase-login",
     "scripts": {
         "build": "pika-pack build --verbose",
@@ -27,10 +26,11 @@
                 }
             ],
             [
-                "@pika/plugin-build-types"
+                "@pika/plugin-build-node",
+                {}
             ],
             [
-                "@pika/plugin-build-umd"
+                "@pika/plugin-build-types"
             ]
         ]
     },
@@ -57,8 +57,8 @@
         "@babel/plugin-proposal-class-properties": "^7.7.4",
         "@babel/plugin-proposal-decorators": "^7.7.4",
         "@pika/pack": "^0.5.0",
+        "@pika/plugin-build-node": "^0.8.1",
         "@pika/plugin-build-types": "^0.8.1",
-        "@pika/plugin-build-umd": "^0.8.1",
         "@pika/plugin-standard-pkg": "^0.8.1",
         "@types/jasmine": "^3.5.0",
         "husky": "^4.0.6",

@@ -5,7 +5,7 @@ import { IAuthProvider } from "./i-auth-provider";
 export abstract class AbstractAuthentication implements IAuthProvider {
     public readonly providerOptions: any;
 
-    public constructor(private platform: Platform) {}
+    protected constructor(private platform: Platform) {}
 
     public abstract handleBrowserLogin(): Promise<auth.UserCredential | null>;
 

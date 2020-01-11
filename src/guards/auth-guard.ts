@@ -7,12 +7,12 @@ import {
 } from "@angular/router";
 import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
-import { AuthService } from "../services/auth.service";
+import { BaseAuthService } from "../services/base-auth-service";
 
 export class AuthGuard implements CanActivate {
     public loginPage = "/login";
 
-    public constructor(private auth: AuthService, private router: Router) {}
+    public constructor(private auth: BaseAuthService, private router: Router) {}
 
     public canActivate(
         next: ActivatedRouteSnapshot,

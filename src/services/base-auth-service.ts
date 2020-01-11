@@ -1,32 +1,35 @@
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreDocument, } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
-import { Facebook } from '@ionic-native/facebook/ngx';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
-import { Platform } from '@ionic/angular';
-import { Cacheable } from 'ngx-cacheable';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { FirebaseUserModel } from '../model/firebase-user-model';
-import { UserModel } from '../model/user-model';
-import { FacebookAuthentication } from '../providers/facebook-authentication';
-import { GoogleAuthentication } from '../providers/google-authentication';
-import { IAuthOptions } from './i-auth-options';
-import { IAuthService } from './i-auth-service';
+import { AngularFireAuth } from "@angular/fire/auth";
+import {
+    AngularFirestore,
+    AngularFirestoreDocument,
+} from "@angular/fire/firestore";
+import { Router } from "@angular/router";
+import { Facebook } from "@ionic-native/facebook/ngx";
+import { GooglePlus } from "@ionic-native/google-plus/ngx";
+import { Platform } from "@ionic/angular";
+import { Cacheable } from "ngx-cacheable";
+import { Observable, of } from "rxjs";
+import { switchMap } from "rxjs/operators";
+import { FirebaseUserModel } from "../model/firebase-user-model";
+import { UserModel } from "../model/user-model";
+import { FacebookAuthentication } from "../providers/facebook-authentication";
+import { GoogleAuthentication } from "../providers/google-authentication";
+import { IAuthOptions } from "./i-auth-options";
+import { IAuthService } from "./i-auth-service";
 
-export class AuthService<User extends UserModel = UserModel>
+export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
-    public loginPage = '/login';
-    public afterLoginPage = '/';
+    public loginPage = "/login";
+    public afterLoginPage = "/";
     public user$: Observable<User | null>;
     public firestoreOptions = {
-        userTable: 'users',
+        userTable: "users",
     };
     public authOptions: IAuthOptions = {
         google: {
             offline: true,
-            scopes: 'profile email',
-            webClientId: 'xxxxxx.apps.googleusercontent.com',
+            scopes: "profile email",
+            webClientId: "xxxxxx.apps.googleusercontent.com",
         },
     };
 
@@ -48,7 +51,7 @@ export class AuthService<User extends UserModel = UserModel>
      */
     @Cacheable()
     public getUser(): Observable<User | null> {
-        console.log('Get user NOT from cache.');
+        console.log("Get user NOT from cache.");
         return this.user$;
     }
 
@@ -77,7 +80,7 @@ export class AuthService<User extends UserModel = UserModel>
                 uid: user.uid,
             });
 
-            return userRef.set(Object.assign({}, data), {merge: true});
+            return userRef.set(Object.assign({}, data), { merge: true });
         } else {
             return;
         }
@@ -135,7 +138,7 @@ export class AuthService<User extends UserModel = UserModel>
                 merge: true,
             });
         } else {
-            console.error('Firebase user has no UID.');
+            console.error("Firebase user has no UID.");
         }
     }
 }
