@@ -6,7 +6,7 @@
     "license": "MIT",
     "repository": "https://github.com/cothema/ionic-universal-firebase-login",
     "scripts": {
-        "build": "pika-pack build --verbose && ng build",
+        "build": "pika build --verbose && ng build",
         "lint": "tslint -p . --fix",
         "pub": "pika publish",
         "version": "npm run build"
@@ -18,8 +18,7 @@
         "firebase"
     ],
     "@pika/pack": {
-        "pipeline": [
-        ]
+        "pipeline": []
     },
     "prepublish": "npm run lint && npm run build",
     "dependencies": {},
@@ -57,6 +56,7 @@
         "@babel/plugin-proposal-decorators": "^7.7.4",
         "@ionic-native/core": "^5.19.1",
         "@ionic/angular": "^4.11.7",
+        "@pika/cli": "^0.2.0",
         "@pika/pack": "^0.5.0",
         "@pika/plugin-build-node": "^0.8.1",
         "@pika/plugin-build-types": "^0.8.1",
