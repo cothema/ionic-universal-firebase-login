@@ -13,12 +13,14 @@ import { Observable, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { FirebaseUserModel } from "../model/firebase-user-model";
 import { UserModel } from "../model/user-model";
-import { FacebookAuthentication } from "../providers/facebook-authentication";
-import { GoogleAuthentication } from "../providers/google-authentication";
+import { FacebookAuth } from "../modules/facebook/facebook-auth";
+import { GoogleAuth } from "../modules/google/google-auth";
 import { IAuthOptions } from "./i-auth-options";
 import { IAuthService } from "./i-auth-service";
 
-@Injectable()
+@Injectable({
+    providedIn: "root",
+})
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
     public loginPage = "/login";
@@ -42,8 +44,8 @@ export class BaseAuthService<User extends UserModel = UserModel>
         private platform: Platform,
         private googleAuth: GooglePlus,
         private facebookAuth: Facebook,
-        private authGoogle: GoogleAuthentication,
-        private authFacebook: FacebookAuthentication,
+        private authGoogle: GoogleAuth,
+        private authFacebook: FacebookAuth,
     ) {
         this.user$ = this.fetchUser();
     }

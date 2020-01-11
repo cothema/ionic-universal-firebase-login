@@ -1,28 +1,40 @@
 {
+    "compileOnSave": false,
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
+        "baseUrl": "./",
+        "declaration": true,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
         "lib": [
+            "es2018",
             "es2017",
             "es7",
             "es6",
             "dom"
         ],
-        "declaration": true,
-        "sourceMap": true,
-        "outDir": "./dist",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "outDir": "./dist/out-tsc",
         "rootDir": "./src",
-        "importHelpers": true,
+        "sourceMap": true,
         "strict": true,
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "target": "es2015",
+        "typeRoots": [
+            "node_modules/@types"
+        ]
     },
     "include": [
         "src/**/*"
     ],
     "exclude": [
         "node_modules",
-        "dist"
-    ]
+        "dist",
+        "pkg"
+    ],
+    "angularCompilerOptions": {
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true,
+        "preserveSymlinks": true
+    }
 }

@@ -6,7 +6,7 @@
     "license": "MIT",
     "repository": "https://github.com/cothema/ionic-universal-firebase-login",
     "scripts": {
-        "build": "pika-pack build --verbose",
+        "build": "pika-pack build --verbose && ng build",
         "lint": "tslint -p . --fix",
         "pub": "pika publish",
         "version": "npm run build"
@@ -19,23 +19,11 @@
     ],
     "@pika/pack": {
         "pipeline": [
-            [
-                "@pika/plugin-standard-pkg",
-                {
-                    "exclude": []
-                }
-            ],
-            [
-                "@pika/plugin-build-node",
-                {}
-            ],
-            [
-                "@pika/plugin-build-types"
-            ]
         ]
     },
     "prepublish": "npm run lint && npm run build",
-    "dependencies": {
+    "dependencies": {},
+    "peerDependencies": {
         "firebase": "^7.6.2",
         "ngx-cacheable": "^1.3.2",
         "rxjs": "^6.5.4",
@@ -46,29 +34,49 @@
         "@angular/fire": "^5.3.0",
         "@angular/core": "^8.2.14",
         "@angular/common": ">=6.0.0 <9 || ^9.0.0-0",
-        "@angular/forms": "^8.2.14"
+        "@angular/forms": "^8.2.14",
+        "@angular/platform-browser": "^8.2.14",
+        "@angular/compiler": "^8.2.14"
     },
-    "peerDependencies": {},
     "optionalDependencies": {
         "@ionic-native/facebook": "^5.19.1",
         "@ionic-native/google-plus": "^5.19.1"
     },
     "devDependencies": {
+        "@angular-devkit/build-ng-packagr": "^0.803.22",
+        "@angular/cli": "^8.3.22",
+        "@angular/common": "^8.2.14",
+        "@angular/compiler": "^8.2.14",
+        "@angular/compiler-cli": "^8.2.14",
+        "@angular/core": "^8.2.14",
+        "@angular/fire": "^5.3.0",
+        "@angular/forms": "^8.2.14",
+        "@angular/platform-browser": "^8.2.14",
+        "@angular/router": "^8.2.14",
         "@babel/plugin-proposal-class-properties": "^7.7.4",
         "@babel/plugin-proposal-decorators": "^7.7.4",
+        "@ionic-native/core": "^5.19.1",
+        "@ionic/angular": "^4.11.7",
         "@pika/pack": "^0.5.0",
         "@pika/plugin-build-node": "^0.8.1",
         "@pika/plugin-build-types": "^0.8.1",
-        "@pika/plugin-standard-pkg": "^0.8.1",
+        "@pika/plugin-ts-standard-pkg": "^0.8.1",
         "@types/jasmine": "^3.5.0",
+        "@types/node": "^13.1.6",
+        "firebase": "^7.6.2",
         "husky": "^4.0.6",
+        "install-peers": "^1.0.3",
         "lint-staged": "^9.5.0",
+        "ng-packagr": "^5.7.1",
+        "ngx-cacheable": "^1.3.2",
         "prettier": "^1.19.1",
+        "rxjs": "^6.5.4",
         "tslint": "^5.20.1",
         "tslint-config-prettier": "^1.18.0",
         "tslint-etc": "^1.10.0",
         "tslint-plugin-prettier": "^2.1.0",
-        "typescript": "^3.7.4"
+        "typescript": "~3.5.3",
+        "zone.js": "^0.9.1"
     },
     "prettier": {
         "trailingComma": "all"

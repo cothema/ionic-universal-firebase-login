@@ -1,19 +1,18 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { GooglePlus } from "@ionic-native/google-plus/ngx";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
-import { AbstractAuthentication } from "./abstract-authentication";
-import { IAuthProvider } from "./i-auth-provider";
+import { AbstractAuth } from "../../providers/abstract-auth";
+import { IAuthProvider } from "../../providers/i-auth-provider";
 
-@Injectable()
-export class TwitterAuthentication extends AbstractAuthentication
-    implements IAuthProvider {
+@Injectable({
+    providedIn: "root",
+})
+export class TwitterAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerOptions = {};
 
     public constructor(
         private angularFireAuth: AngularFireAuth,
-        private googleAuth: GooglePlus,
         platform: Platform,
     ) {
         super(platform);

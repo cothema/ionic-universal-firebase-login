@@ -10,7 +10,9 @@ import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
 import { BaseAuthService } from "../services/base-auth-service";
 
-@Injectable()
+@Injectable({
+    providedIn: "root",
+})
 export class AuthGuard implements CanActivate {
     public loginPage = "/login";
 

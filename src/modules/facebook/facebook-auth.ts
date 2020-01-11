@@ -3,12 +3,13 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
-import { AbstractAuthentication } from "./abstract-authentication";
-import { IAuthProvider } from "./i-auth-provider";
+import { AbstractAuth } from "../../providers/abstract-auth";
+import { IAuthProvider } from "../../providers/i-auth-provider";
 
-@Injectable()
-export class FacebookAuthentication extends AbstractAuthentication
-    implements IAuthProvider {
+@Injectable({
+    providedIn: "root",
+})
+export class FacebookAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerOptions = {
         permissions: ["public_profile"],
         scopes: ["public_profile", "user_friends", "email"],

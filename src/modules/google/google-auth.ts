@@ -3,12 +3,13 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { GooglePlus } from "@ionic-native/google-plus/ngx";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
-import { AbstractAuthentication } from "./abstract-authentication";
-import { IAuthProvider } from "./i-auth-provider";
+import { AbstractAuth } from "../../providers/abstract-auth";
+import { IAuthProvider } from "../../providers/i-auth-provider";
 
-@Injectable()
-export class GoogleAuthentication extends AbstractAuthentication
-    implements IAuthProvider {
+@Injectable({
+    providedIn: "root",
+})
+export class GoogleAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerOptions = {
         offline: true,
         scopes: "profile email",

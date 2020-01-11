@@ -1,7 +1,7 @@
-import { IFacebookAuthOptions } from "../providers/i-facebook-auth-options";
-import { IGithubAuthOptions } from "../providers/i-github-auth-options";
-import { IGoogleAuthOptions } from "../providers/i-google-auth-options";
-import { ITwitterAuthOptions } from "../providers/i-twitter-auth-options";
+import { IFacebookAuthOptions } from "../modules/facebook/i-facebook-auth-options";
+import { IGithubAuthOptions } from "../modules/github/i-github-auth-options";
+import { IGoogleAuthOptions } from "../modules/google/i-google-auth-options";
+import { ITwitterAuthOptions } from "../modules/twitter/i-twitter-auth-options";
 
 export interface IAuthOptions {
     facebook?: IFacebookAuthOptions;

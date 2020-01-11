@@ -2,7 +2,7 @@ import { Platform } from "@ionic/angular";
 import { auth } from "firebase";
 import { IAuthProvider } from "./i-auth-provider";
 
-export abstract class AbstractAuthentication implements IAuthProvider {
+export abstract class AbstractAuth implements IAuthProvider {
     public readonly providerOptions: any;
 
     protected constructor(private platform: Platform) {}

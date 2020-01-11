@@ -1,0 +1,24 @@
+{
+    "$schema": "node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "pkg",
+    "lib": {
+        "entryFile": "src/index.ts",
+        "umdModuleIds": {
+            "@angular/core": "@angular/core",
+            "@angular/fire": "@angular/fire",
+            "@angular/fire/index": "@angular/fire",
+            "@angular/fire/auth": "@angular/fire",
+            "@angular/fire/firestore": "@angular/fire",
+            "@angular/router": "@angular/router",
+            "@ionic/angular": "@ionic/angular",
+            "@ionic-native/facebook/ngx": "@ionic-native/facebook",
+            "@ionic-native/facebook/ngx/index": "@ionic-native/facebook",
+            "@ionic-native/google-plus/ngx": "@ionic-native/google-plus",
+            "@ionic-native/google-plus/ngx/index": "@ionic-native/google-plus",
+            "firebase/app": "firebase/app",
+            "ngx-cacheable": "ngx-cacheable",
+            "rxjs": "rxjs",
+            "rxjs/operators": "rxjs"
+        }
+    }
+}
