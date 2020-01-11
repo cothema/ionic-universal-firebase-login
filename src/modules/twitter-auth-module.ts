@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { IonicModule } from "@ionic/angular";
-import { TwitterAuthentication } from "..";
+import { TwitterAuthentication } from "../providers/twitter-authentication";
 
 @NgModule({
     imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
