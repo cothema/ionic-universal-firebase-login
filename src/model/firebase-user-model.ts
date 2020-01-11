@@ -1,4 +1,4 @@
-import { UserModel } from "./user.model";
+import { UserModel } from "./user-model";
 
 /**
  * Firestore structure is same as user model structure, so this is an alias only

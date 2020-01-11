@@ -4,12 +4,13 @@
     "description": "Easy to use universal (browser, Android, iOS) authentication via Firebase for Ionic",
     "author": "Miloš Havlíček",
     "license": "MIT",
-    "main": "dist/index.js",
+    "main": "src/index.ts",
+    "repository": "https://github.com/cothema/ionic-universal-firebase-login",
     "scripts": {
-        "build": "tsc -p .",
+        "build": "pika-pack build --verbose",
         "lint": "tslint -p . --fix",
-        "pub:prepare": "./scripts/prepublish.sh",
-        "pub": "npm run pub:prepare && npm publish dist"
+        "pub": "pika publish",
+        "version": "npm run build"
     },
     "keywords": [
         "ionic",
@@ -17,27 +18,48 @@
         "login",
         "firebase"
     ],
+    "@pika/pack": {
+        "pipeline": [
+            [
+                "@pika/plugin-standard-pkg",
+                {
+                    "exclude": []
+                }
+            ],
+            [
+                "@pika/plugin-build-types"
+            ],
+            [
+                "@pika/plugin-build-umd"
+            ]
+        ]
+    },
     "prepublish": "npm run lint && npm run build",
     "dependencies": {
         "firebase": "^7.6.2",
         "ngx-cacheable": "^1.3.2",
         "rxjs": "^6.5.4",
-        "zone.js": "~0.9.1"
-    },
-    "peerDependencies": {
-        "@angular/common": ">=6.0.0 <9 || ^9.0.0-0",
-        "@angular/core": "^8.2.14",
-        "@angular/fire": "^5.3.0",
-        "@angular/forms": "^8.2.14",
-        "@angular/router": "^8.2.14",
+        "zone.js": "~0.9.1",
         "@ionic-native/core": "^5.19.1",
-        "@ionic/angular": "^4.11.7"
+        "@angular/router": "^8.2.14",
+        "@ionic/angular": "^4.11.7",
+        "@angular/fire": "^5.3.0",
+        "@angular/core": "^8.2.14",
+        "@angular/common": ">=6.0.0 <9 || ^9.0.0-0",
+        "@angular/forms": "^8.2.14"
     },
+    "peerDependencies": {},
     "optionalDependencies": {
         "@ionic-native/facebook": "^5.19.1",
         "@ionic-native/google-plus": "^5.19.1"
     },
     "devDependencies": {
+        "@babel/plugin-proposal-class-properties": "^7.7.4",
+        "@babel/plugin-proposal-decorators": "^7.7.4",
+        "@pika/pack": "^0.5.0",
+        "@pika/plugin-build-types": "^0.8.1",
+        "@pika/plugin-build-umd": "^0.8.1",
+        "@pika/plugin-standard-pkg": "^0.8.1",
         "@types/jasmine": "^3.5.0",
         "husky": "^4.0.6",
         "lint-staged": "^9.5.0",
