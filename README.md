@@ -1,6 +1,9 @@
 # Universal Firebase login for Ionic
 
-The easiest to use hybrid module for Ionic (Angular) with complete
+Do you want to implement native authentication as well as in browser authetication
+for your Ionic application? This package is for you!
+
+The easiest to use flexible hybrid module for Ionic (Angular) with complete
 documentation and step-by-step guide. We use Firestore for
 authentication service and its Firestore for storing information
 about users.
@@ -23,11 +26,19 @@ No more pain with login implementation troubles!
 - Email
 - Phone
 
+**What's included?** Unified providers API, platform recognition,
+simple authentication guard, basic authentication service and
+basic user model. You can customize almost everything to your
+own needs.
+
 ## Contribution
 
 **Feel free to send pull requests or create new issues.**
 
 ## Installation
+
+- Before you start, be sure that you have signed your application.
+It is required for native authentication on Android and iOS.
 
 Install with `npm`:
 
@@ -35,12 +46,13 @@ Install with `npm`:
 npm install ionic-universal-firebase-login --save
 ```
 
-Go to https://firebase.google.com/ and create an account for your app 
+- Go to https://firebase.google.com/ and create an account for your app 
 if you don't have it already.
-- Open your app settings and in General section at the bottom copy
+  - Create Web app, Android app (optionally) and iOS app (optionally)
+  - Open your app settings and in General section at the bottom copy
 Firebase SDK snippet (in Config format).
 
-Edit `src/environments/environment.ts` and copy the config as in
+- Edit `src/environments/environment.ts` and copy the config as in
 example below:
 
 ```typescript
@@ -59,7 +71,7 @@ export const environment = {
 }
 ```
 
-Edit `src/app/app.module.ts` and add:
+- Edit `src/app/app.module.ts` and add:
 
 ```` typescript
 @NgModule({
@@ -73,7 +85,7 @@ Edit `src/app/app.module.ts` and add:
 })
 ````
 
-In Firebase go in menu to Authentication and enable methods
+- In Firebase go in menu to Authentication and enable methods
 you want to use and set configuration in your app. See our guide for each provider
 (links are at the top of this page).
 
