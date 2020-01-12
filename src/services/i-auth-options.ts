@@ -1,5 +1,5 @@
 export interface IAuthOptions {
-    afterLoginPage: string;
+    afterLoginPage: string | false;
     firebaseUserTable: string;
-    loginPage: string;
+    loginPage: string | false;
 }

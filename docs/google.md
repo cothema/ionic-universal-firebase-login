@@ -25,7 +25,7 @@ Select a different project at the top on left side if needed.
 ionic cordova plugin add cordova-plugin-googleplus --variable WEB_APPLICATION_CLIENT_ID="xxx.apps.googleusercontent.com"
 ```
 
-## Frequented errors
+## Frequent errors
 
 - **Error: Uncaught (in promise): 10**
   - You don't have sign your app correctly or you have wrong client id in your configuration.
