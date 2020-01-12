@@ -2,6 +2,7 @@
 
 [Go back to README](../README.md)
 
+- Start with installation steps on [README page](../README.md).
 - Install required packages via npm:
 
 (Don't be confused by google-plus in package name, package already uses new Google API, not deprecated Google Plus API)

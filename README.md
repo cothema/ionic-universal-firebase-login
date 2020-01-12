@@ -1,6 +1,6 @@
 # Universal Firebase login for Ionic
 
-Easy to use hybrid module for Ionic (Angular) with complete
+The easiest to use hybrid module for Ionic (Angular) with complete
 documentation and step-by-step guide. We use Firestore for
 authentication service and its Firestore for storing information
 about users.
@@ -12,7 +12,10 @@ No more pain with login implementation troubles!
 - Android
 - iOS
 
-**Supported providers:**
+
+**See documentation and guides on:** https://github.com/cothema/ionic-universal-firebase-login
+
+## Supported providers:
 - [Google - see guide](docs/google.md)
 - [Facebook - see guide](docs/facebook.md)
 - Twitter (browser only)

@@ -4,6 +4,7 @@
 
 Documentation from Ionic: https://ionicframework.com/docs/native/facebook.
 
+- Start with installation steps on [README page](../README.md).
 - Install required packages via npm:
 ``` bash
 npm install @ionic-native/facebook --save
