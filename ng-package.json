@@ -20,5 +20,8 @@
             "rxjs": "rxjs",
             "rxjs/operators": "rxjs"
         }
-    }
+    },
+    "whitelistedNonPeerDependencies": [
+        "ngx-cacheable"
+    ]
 }

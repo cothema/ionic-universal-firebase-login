@@ -6,7 +6,7 @@
     "license": "MIT",
     "repository": "https://github.com/cothema/ionic-universal-firebase-login",
     "scripts": {
-        "build": "pika build --verbose && ng build",
+        "build": "mkdir -p pkg && pika build --verbose && ng build",
         "lint": "tslint -p . --fix",
         "pub": "pika publish",
         "version": "npm run build"
