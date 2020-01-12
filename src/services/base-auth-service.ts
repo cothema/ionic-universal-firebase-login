@@ -16,6 +16,7 @@ import { UserModel } from "../model/user-model";
 import { FacebookAuth } from "../modules/facebook/facebook-auth";
 import { GoogleAuth } from "../modules/google/google-auth";
 import { IAuthOptions } from "./i-auth-options";
+import { IAuthProviderOptions } from "./i-auth-provider-options";
 import { IAuthService } from "./i-auth-service";
 
 @Injectable({
@@ -23,13 +24,12 @@ import { IAuthService } from "./i-auth-service";
 })
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
-    public loginPage = "/login";
-    public afterLoginPage = "/";
-    public user$: Observable<User | null>;
-    public firestoreOptions = {
-        userTable: "users",
+    protected options: IAuthOptions = {
+        afterLoginPage: "/",
+        firebaseUserTable: "users",
+        loginPage: "/login",
     };
-    public authOptions: IAuthOptions = {
+    protected providerOptions: IAuthProviderOptions = {
         google: {
             offline: true,
             scopes: "profile email",
@@ -46,9 +46,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
         private facebookAuth: Facebook,
         private authGoogle: GoogleAuth,
         private authFacebook: FacebookAuth,
-    ) {
-        this.user$ = this.fetchUser();
-    }
+    ) {}
 
     /**
      * Get user from cache if possible
@@ -56,7 +54,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
     @Cacheable()
     public getUser(): Observable<User | null> {
         console.log("Get user NOT from cache.");
-        return this.user$;
+        return this.fetchUser();
     }
 
     public async signInViaGoogle(): Promise<any> {
@@ -93,14 +91,14 @@ export class BaseAuthService<User extends UserModel = UserModel>
     public async signOut(): Promise<void> {
         await this.angularFireAuth.auth.signOut();
 
-        this.router.navigate([this.loginPage]);
+        this.router.navigate([this.options.loginPage]);
     }
 
-    private onAfterLogin() {
-        this.router.navigate([this.afterLoginPage]);
+    protected onAfterLogin() {
+        this.router.navigate([this.options.afterLoginPage]);
     }
 
-    private fetchUser(): Observable<any> {
+    protected fetchUser(): Observable<any> {
         // Get the auth state, then fetch the Firestore user document or return null
         return this.angularFireAuth.authState.pipe(
             switchMap((user: any) => {
@@ -108,13 +106,13 @@ export class BaseAuthService<User extends UserModel = UserModel>
                     // User is logged in
                     return this.angularFirestore
                         .doc<FirebaseUserModel>(
-                            `${this.firestoreOptions.userTable}/${user.uid}`,
+                            `${this.options.firebaseUserTable}/${user.uid}`,
                         )
                         .valueChanges()
                         .pipe(
                             switchMap((userFirebase: any) => {
                                 return Object.assign(
-                                    new UserModel(),
+                                    this.getNewUser(),
                                     userFirebase,
                                 );
                             }),
@@ -126,15 +124,19 @@ export class BaseAuthService<User extends UserModel = UserModel>
         );
     }
 
-    private getUserRef(
+    protected getNewUser() {
+        return new UserModel();
+    }
+
+    protected getUserRef(
         userUid: string,
     ): AngularFirestoreDocument<FirebaseUserModel> {
         return this.angularFirestore.doc(
-            `${this.firestoreOptions.userTable}/${userUid}`,
+            `${this.options.firebaseUserTable}/${userUid}`,
         );
     }
 
-    private updateDbDataByFirebaseUser(firebaseUser: FirebaseUserModel) {
+    protected updateDbDataByFirebaseUser(firebaseUser: FirebaseUserModel) {
         if (firebaseUser.uid) {
             const userRef = this.getUserRef(firebaseUser.uid);
 
