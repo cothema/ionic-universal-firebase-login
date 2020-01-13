@@ -46,7 +46,7 @@ It is required for native authentication on Android and iOS.
 Install with `npm`:
 
 ``` bash
-npm install ionic-universal-firebase-login --save
+npm install ionic-universal-firebase-login
 ```
 
 - Go to https://firebase.google.com/ and create an account for your app 
