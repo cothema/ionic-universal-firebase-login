@@ -143,9 +143,9 @@ export class BaseAuthService<User extends UserModel = UserModel>
     protected getUserRef(
         userUid: string,
     ): AngularFirestoreDocument<FirebaseUserModel> {
-        return this.angularFirestore.doc(
-            `${this.options.firebaseUserTable}/${userUid}`,
-        );
+        return this.angularFirestore
+            .collection(this.options.firebaseUserTable)
+            .doc(userUid);
     }
 
     protected updateDbDataByFirebaseUser(firebaseUser: FirebaseUserModel) {
