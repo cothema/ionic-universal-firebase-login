@@ -47,7 +47,7 @@ It is required for native authentication on Android and iOS.
 Install with `npm`:
 
 ``` bash
-npm install firebase @angular/fire ionic-universal-firebase-login
+npm install firebase @angular/fire ionic-universal-firebase-login ngx-cacheable
 ```
 
 - Go to https://firebase.google.com/ and create an account for your app 
@@ -57,8 +57,8 @@ if you don't have it already.
   (if you already have created your app you can also get configuration in
   your Firebase app settings -> General section at the bottom -> copy
   Firebase SDK snippet - Config format).
-  Configuration is the same for all platforms (apps) - e.g. browser and Android
-
+  Configuration is the same for all platforms (apps) - e.g. browser and Android;
+  so you have to do this step only once.
 - Edit `src/environments/environment.ts` and copy the config from previous step as in
 example below:
 
@@ -96,9 +96,14 @@ import {GoogleAuthModule, FacebookAuthModule} from 'ionic-universal-firebase-log
 })
 ````
 
-- In Firebase go in menu to Authentication and enable methods
-you want to use and set configuration in your app. See our guide for each provider
-(links are at the top of this page).
+- Guide for Android SHA-1 and SHA256 generation: https://developers.google.com/android/guides/client-auth
+- Enter SHA1 key in the first step of Android app creation. SHA256 is used for Firestore in next steps. 
+- Click to Download google-services.json and copy it to your project root 
+- Skip last (4th) step, because its for Android Studio project only.
+
+- See our guide for each provider:
+  - [Google - see guide](docs/google.md)
+  - [Facebook - see guide](docs/facebook.md)
 
 ## Example implementations
 

@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 import { LoginPage } from './login.page';
 
 @NgModule({
     imports: [
+        IonicModule,
         RouterModule.forChild([
             {
                 path: '',
@@ -13,5 +15,5 @@ import { LoginPage } from './login.page';
     ],
     declarations: [LoginPage],
 })
-export class HomeModule {
+export class LoginModule {
 }

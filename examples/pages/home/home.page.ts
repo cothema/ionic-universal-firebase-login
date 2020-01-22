@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { BaseAuthService } from '../../../src/services/base-auth-service';
 
 @Component({
@@ -11,9 +9,7 @@ import { BaseAuthService } from '../../../src/services/base-auth-service';
 export class HomePage {
 
     public constructor(
-        public afAuth: AngularFireAuth,
-        private router: Router,
-        private auth: BaseAuthService,
+        public auth: BaseAuthService,
     ) {
     }
 
