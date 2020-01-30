@@ -21,8 +21,7 @@ export class EmailAuth extends AbstractAuth implements IAuthProvider {
     public async handleNativeLogin(
         options: any,
     ): Promise<auth.UserCredential | null> {
-        console.error("Method not implemented!");
-        return null;
+        return this.handleBrowserLogin();
     }
 
     public async handleBrowserLogin(): Promise<auth.UserCredential | null> {

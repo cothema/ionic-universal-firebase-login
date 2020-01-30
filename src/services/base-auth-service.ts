@@ -1,39 +1,37 @@
-import { Injectable } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/auth";
-import {
-    AngularFirestore,
-    AngularFirestoreDocument,
-} from "@angular/fire/firestore";
-import { Router } from "@angular/router";
-import { Facebook } from "@ionic-native/facebook/ngx";
-import { GooglePlus } from "@ionic-native/google-plus/ngx";
-import { Platform } from "@ionic/angular";
-import { Cacheable } from "ngx-cacheable";
-import { Observable, of } from "rxjs";
-import { switchMap } from "rxjs/operators";
-import { FirebaseUserModel } from "../model/firebase-user-model";
-import { UserModel } from "../model/user-model";
-import { FacebookAuth } from "../modules/facebook/facebook-auth";
-import { GoogleAuth } from "../modules/google/google-auth";
-import { IAuthOptions } from "./i-auth-options";
-import { IAuthProviderOptions } from "./i-auth-provider-options";
-import { IAuthService } from "./i-auth-service";
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreDocument, } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { Facebook } from '@ionic-native/facebook/ngx';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { Platform } from '@ionic/angular';
+import { Cacheable } from 'ngx-cacheable';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { FirebaseUserModel } from '../model/firebase-user-model';
+import { UserModel } from '../model/user-model';
+import { EmailAuth } from '../modules/email/email-auth';
+import { FacebookAuth } from '../modules/facebook/facebook-auth';
+import { GoogleAuth } from '../modules/google/google-auth';
+import { IAuthOptions } from './i-auth-options';
+import { IAuthProviderOptions } from './i-auth-provider-options';
+import { IAuthService } from './i-auth-service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
     protected options: IAuthOptions = {
-        afterLoginPage: "/",
-        firebaseUserTable: "users",
-        loginPage: "/login",
+        afterLoginPage: '/',
+        firebaseUserTable: 'users',
+        loginPage: '/login',
     };
     protected providerOptions: IAuthProviderOptions = {
         google: {
             offline: true,
-            scopes: "profile email",
-            webClientId: "xxxxxx.apps.googleusercontent.com",
+            scopes: 'profile email',
+            webClientId: 'xxxxxx.apps.googleusercontent.com',
         },
     };
 
@@ -46,29 +44,50 @@ export class BaseAuthService<User extends UserModel = UserModel>
         protected facebookAuth: Facebook,
         protected authGoogle: GoogleAuth,
         protected authFacebook: FacebookAuth,
-    ) {}
+        protected authEmail: EmailAuth
+    ) {
+    }
 
     /**
      * Get user from cache if possible
      */
     @Cacheable()
     public getUser(): Observable<User | unknown | null> {
-        console.log("Get user NOT from cache.");
+        console.log('Get user NOT from cache.');
         return this.fetchUser();
     }
 
-    public async signInViaGoogle(): Promise<any> {
-        return await this.authGoogle.handleLogin().then((credential: any) => {
-            this.updateDbDataByFirebaseUser(credential.user);
-            this.onAfterLogin();
-        });
+    public async signInViaGoogle(storeInDb = false): Promise<any> {
+        return await this.authGoogle
+            .handleLogin()
+            .then((credential: any) => {
+                if (storeInDb) {
+                    this.updateDbDataByFirebaseUser(credential.user);
+                }
+                this.onAfterLogin();
+            });
     }
 
-    public async signInViaFacebook(): Promise<any> {
-        return await this.authFacebook.handleLogin().then((credential: any) => {
-            this.updateDbDataByFirebaseUser(credential.user);
-            this.onAfterLogin();
-        });
+    public async signInViaFacebook(storeInDb = false): Promise<any> {
+        return await this.authFacebook
+            .handleLogin()
+            .then((credential: any) => {
+                if (storeInDb) {
+                    this.updateDbDataByFirebaseUser(credential.user);
+                }
+                this.onAfterLogin();
+            });
+    }
+
+    public async signInViaEmail(storeInDb = false): Promise<any> {
+        return await this.authEmail
+            .handleLogin()
+            .then((credential: any) => {
+                if (storeInDb) {
+                    this.updateDbDataByFirebaseUser(credential.user);
+                }
+                this.onAfterLogin();
+            });
     }
 
     public async updateDbDataByUser(user: User): Promise<void> {
@@ -82,7 +101,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
                 uid: user.uid,
             });
 
-            return userRef.set(Object.assign({}, data), { merge: true });
+            return userRef.set(Object.assign({}, data), {merge: true});
         } else {
             return;
         }
@@ -152,11 +171,18 @@ export class BaseAuthService<User extends UserModel = UserModel>
         if (firebaseUser.uid) {
             const userRef = this.getUserRef(firebaseUser.uid);
 
-            return userRef.set(Object.assign({}, firebaseUser), {
+            const data = new FirebaseUserModel({
+                displayName: firebaseUser.displayName,
+                email: firebaseUser.email,
+                photoURL: firebaseUser.photoURL,
+                uid: firebaseUser.uid,
+            });
+
+            return userRef.set(Object.assign({}, data), {
                 merge: true,
             });
         } else {
-            console.error("Firebase user has no UID.");
+            console.error('Firebase user has no UID.');
         }
     }
 }
