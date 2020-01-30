@@ -6,6 +6,7 @@ export * from "./model/firebase-user-model";
 export * from "./model/user-model";
 
 // Providers
+export * from "./modules/email/email-auth";
 export * from "./modules/facebook/facebook-auth";
 export * from "./modules/github/github-auth";
 export * from "./modules/google/google-auth";

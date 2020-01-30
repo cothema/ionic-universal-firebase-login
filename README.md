@@ -55,7 +55,7 @@ if you don't have it already.
   - Create Web app, Android app (optionally) and iOS app (optionally)
   - In the second step of app creation copy values from firebaseConfig object
   (if you already have created your app you can also get configuration in
-  your Firebase app settings -> General section at the bottom -> copy
+  your Firebase app settings -> General tab -> select web app project -> copy
   Firebase SDK snippet - Config format).
   Configuration is the same for all platforms (apps) - e.g. browser and Android;
   so you have to do this step only once.

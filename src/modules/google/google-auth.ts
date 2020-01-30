@@ -38,7 +38,9 @@ export class GoogleAuth extends AbstractAuth implements IAuthProvider {
 
     public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
         const provider = new auth.GoogleAuthProvider();
-
+        provider.setCustomParameters({
+            prompt: "select_account",
+        });
         return await this.angularFireAuth.auth.signInWithPopup(provider);
     }
 }
