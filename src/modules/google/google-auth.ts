@@ -5,23 +5,25 @@ import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
+import { IGoogleAuthOptions } from "./i-google-auth-options";
 
 @Injectable({
     providedIn: "root",
 })
 export class GoogleAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions = {
+    public readonly providerOptions: IGoogleAuthOptions = {
         offline: true,
         scopes: "profile email",
+        signInType: "popup",
         webClientId: "",
     };
 
     public constructor(
-        private angularFireAuth: AngularFireAuth,
         private googleAuth: GooglePlus,
+        angularFireAuth: AngularFireAuth,
         platform: Platform,
     ) {
-        super(platform);
+        super(angularFireAuth, platform);
     }
 
     public async handleNativeLogin(
@@ -36,11 +38,11 @@ export class GoogleAuth extends AbstractAuth implements IAuthProvider {
         );
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
+    protected getBrowserLoginProvider() {
         const provider = new auth.GoogleAuthProvider();
         provider.setCustomParameters({
             prompt: "select_account",
         });
-        return await this.angularFireAuth.auth.signInWithPopup(provider);
+        return provider;
     }
 }

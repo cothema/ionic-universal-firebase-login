@@ -5,22 +5,24 @@ import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
+import { IFacebookAuthOptions } from "./i-facebook-auth-options";
 
 @Injectable({
     providedIn: "root",
 })
 export class FacebookAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions = {
+    public readonly providerOptions: IFacebookAuthOptions = {
         permissions: ["public_profile"],
         scopes: ["public_profile", "user_friends", "email"],
+        signInType: "popup",
     };
 
     public constructor(
-        private angularFireAuth: AngularFireAuth,
         private facebookAuth: Facebook,
+        angularFireAuth: AngularFireAuth,
         platform: Platform,
     ) {
-        super(platform);
+        super(angularFireAuth, platform);
     }
 
     public async handleNativeLogin(
@@ -43,17 +45,20 @@ export class FacebookAuth extends AbstractAuth implements IAuthProvider {
         }
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
-        const provider = new auth.FacebookAuthProvider();
-
-        return await this.angularFireAuth.auth.signInWithPopup(provider);
-    }
-
+    /**
+     * Fetch user from Facebook API
+     *
+     * @param facebookUserId
+     */
     public fetchUser(facebookUserId: string): Promise<any> {
         const scopes = this.providerOptions.scopes.join(",");
         return this.facebookAuth.api(
             `/${facebookUserId}/?fields=${scopes}`,
             this.providerOptions.permissions,
         );
+    }
+
+    protected getBrowserLoginProvider() {
+        return new auth.FacebookAuthProvider();
     }
 }

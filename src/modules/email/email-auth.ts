@@ -4,18 +4,18 @@ import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
+import { IEmailAuthOptions } from "./i-email-auth-options";
 
 @Injectable({
     providedIn: "root",
 })
 export class EmailAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions = {};
+    public readonly providerOptions: IEmailAuthOptions = {
+        signInType: "popup",
+    };
 
-    public constructor(
-        private angularFireAuth: AngularFireAuth,
-        platform: Platform,
-    ) {
-        super(platform);
+    public constructor(angularFireAuth: AngularFireAuth, platform: Platform) {
+        super(angularFireAuth, platform);
     }
 
     public async handleNativeLogin(
@@ -24,9 +24,7 @@ export class EmailAuth extends AbstractAuth implements IAuthProvider {
         return this.handleBrowserLogin();
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
-        const provider = new auth.EmailAuthProvider();
-
-        return await this.angularFireAuth.auth.signInWithPopup(provider);
+    protected getBrowserLoginProvider() {
+        throw new auth.EmailAuthProvider();
     }
 }

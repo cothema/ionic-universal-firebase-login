@@ -19,16 +19,20 @@ No more pain with login implementation troubles!
 - Android
 - iOS
 
-
 **See documentation and guides on:** https://github.com/cothema/ionic-universal-firebase-login
 
-## Supported providers:
-- [Google - see guide](docs/google.md)
-- [Facebook - see guide](docs/facebook.md)
+## Supported providers
+- [Google - see guide](docs/providers/google.md)
+- [Facebook - see guide](docs/providers/facebook.md)
 - Twitter (browser only)
 - Github (browser only)
 - Email
 - Phone
+- Anonymous
+
+**Supported login types:**
+- Pop up / Native
+- Redirect (not implemented at this time)
 
 **What's included?** Unified providers API, platform recognition,
 simple authentication guard, basic authentication service and

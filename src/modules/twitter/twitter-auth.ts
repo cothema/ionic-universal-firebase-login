@@ -11,23 +11,17 @@ import { IAuthProvider } from "../../providers/i-auth-provider";
 export class TwitterAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerOptions = {};
 
-    public constructor(
-        private angularFireAuth: AngularFireAuth,
-        platform: Platform,
-    ) {
-        super(platform);
+    public constructor(angularFireAuth: AngularFireAuth, platform: Platform) {
+        super(angularFireAuth, platform);
     }
 
     public async handleNativeLogin(
         options: any,
     ): Promise<auth.UserCredential | null> {
-        console.error("Method not implemented!");
-        return null;
+        throw new Error("Method not implemented!");
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
-        const provider = new auth.TwitterAuthProvider();
-
-        return await this.angularFireAuth.auth.signInWithPopup(provider);
+    protected getBrowserLoginProvider() {
+        return new auth.TwitterAuthProvider();
     }
 }

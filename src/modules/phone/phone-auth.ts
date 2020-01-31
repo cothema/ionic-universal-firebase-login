@@ -4,30 +4,27 @@ import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
+import { IPhoneAuthOptions } from "./i-phone-auth-options";
 
 @Injectable({
     providedIn: "root",
 })
 export class PhoneAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions = {};
+    public readonly providerOptions: IPhoneAuthOptions = {
+        signInType: "popup",
+    };
 
-    public constructor(
-        private angularFireAuth: AngularFireAuth,
-        platform: Platform,
-    ) {
-        super(platform);
+    public constructor(angularFireAuth: AngularFireAuth, platform: Platform) {
+        super(angularFireAuth, platform);
     }
 
     public async handleNativeLogin(
         options: any,
     ): Promise<auth.UserCredential | null> {
-        console.error("Method not implemented!");
-        return null;
+        throw new Error("Method not implemented!");
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
-        const provider = new auth.PhoneAuthProvider();
-
-        return await this.angularFireAuth.auth.signInWithPopup(provider);
+    protected getBrowserLoginProvider() {
+        return new auth.PhoneAuthProvider();
     }
 }

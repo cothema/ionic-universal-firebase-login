@@ -9,7 +9,7 @@
         "build": "mkdir -p pkg && pika build --verbose && ng build",
         "lint": "tslint -p . --fix",
         "pub": "pika publish",
-        "version": "npm run build"
+        "test": "ng test"
     },
     "keywords": [
         "ionic",
@@ -41,6 +41,7 @@
         "@ionic-native/google-plus": "^5.19.1"
     },
     "devDependencies": {
+        "@angular-devkit/build-angular": "^0.803.24",
         "@angular-devkit/build-ng-packagr": "^0.803.22",
         "@angular/cli": "^8.3.22",
         "@angular/common": "^8.2.14",
@@ -50,6 +51,7 @@
         "@angular/fire": "^5.3.0",
         "@angular/forms": "^8.2.14",
         "@angular/platform-browser": "^8.2.14",
+        "@angular/platform-browser-dynamic": "^8.2.14",
         "@angular/router": "^8.2.14",
         "@babel/plugin-proposal-class-properties": "^7.7.4",
         "@babel/plugin-proposal-decorators": "^7.7.4",
@@ -65,6 +67,11 @@
         "firebase": "^7.6.2",
         "husky": "^4.0.6",
         "install-peers": "^1.0.3",
+        "karma": "^4.4.1",
+        "karma-coverage-istanbul-reporter": "^2.1.1",
+        "karma-jasmine": "^3.1.0",
+        "karma-chrome-launcher": "^3.1.0",
+        "karma-jasmine-html-reporter": "^1.5.1",
         "lint-staged": "^10.0.1",
         "ng-packagr": "^5.7.1",
         "ngx-cacheable": "^1.3.2",
