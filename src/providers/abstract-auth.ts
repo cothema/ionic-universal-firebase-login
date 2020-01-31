@@ -33,7 +33,7 @@ export abstract class AbstractAuth implements IAuthProvider {
         return this.angularFireAuth.auth.signOut();
     }
 
-    public async handleLogout(): Promise<void> {
+    public async handleSignOut(): Promise<void> {
         if (this.platform.is("cordova")) {
             return this.handleNativeLogout();
         } else {

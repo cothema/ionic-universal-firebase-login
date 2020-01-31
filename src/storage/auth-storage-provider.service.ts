@@ -1,26 +1,27 @@
-import { Injectable } from '@angular/core';
-import { Cacheable } from 'ngx-cacheable';
-import { from, Observable } from 'rxjs';
-import { UserModel } from '..';
-import { FirebaseStorage } from './firebase-storage';
-import { IStorageProvider } from './i-storage-provider';
-import { IStorageProviderOptions } from './i-storage-provider-options';
-import { InMemoryStorage } from './in-memory-storage.service';
+import { Injectable } from "@angular/core";
+import { Cacheable } from "ngx-cacheable";
+import { from, Observable } from "rxjs";
+import { UserModel } from "..";
+import { UserFactory } from "../factories/user-factory";
+import { FirebaseStorage } from "./firebase-storage";
+import { IStorageProvider } from "./i-storage-provider";
+import { IStorageProviderOptions } from "./i-storage-provider-options";
+import { InMemoryStorage } from "./in-memory-storage.service";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
-export class StorageProvider<User extends UserModel = UserModel> {
-    options: IStorageProviderOptions = {
-        userTable: 'users',
+export class AuthStorageProvider<User extends UserModel = UserModel> {
+    public options: IStorageProviderOptions = {
         storage: false,
-    }
+        userTable: "users",
+    };
 
     public constructor(
+        public userFactory: UserFactory,
         private firebaseStorage: FirebaseStorage<User>,
-        private inMemoryStorage: InMemoryStorage
-    ) {
-    }
+        private inMemoryStorage: InMemoryStorage,
+    ) {}
 
     /**
      * Get user from cache if possible or from a storage
@@ -33,7 +34,7 @@ export class StorageProvider<User extends UserModel = UserModel> {
             return from(storageProvider.fetchUser());
         }
 
-        throw new Error('No storage provider found.');
+        throw new Error("No storage provider found.");
     }
 
     public getProvider() {
@@ -41,11 +42,11 @@ export class StorageProvider<User extends UserModel = UserModel> {
     }
 
     protected getProviderById(
-        providerId: false | 'firestore',
+        providerId: false | "firestore",
     ): IStorageProvider<User> {
         let provider;
         switch (providerId) {
-            case 'firestore':
+            case "firestore":
                 provider = this.firebaseStorage;
                 provider.options.userTable = this.options.userTable;
                 break;

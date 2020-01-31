@@ -1,33 +1,33 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
-import { auth } from 'firebase';
-import { Observable } from 'rxjs';
-import { UserModel } from '../model/user-model';
-import { AuthProvider } from '../providers/auth-provider';
-import { IAuthProvider } from '../providers/i-auth-provider';
-import { StorageProvider } from '../storage/storage-provider';
-import { IAuthOptions } from './i-auth-options';
-import { IAuthProviderOptions } from './i-auth-provider-options';
-import { IAuthService } from './i-auth-service';
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { Platform } from "@ionic/angular";
+import { auth } from "firebase/app";
+import { Observable } from "rxjs";
+import { UserModel } from "../model/user-model";
+import { AuthProvider } from "../providers/auth-provider";
+import { IAuthProvider } from "../providers/i-auth-provider";
+import { AuthStorageProvider } from "../storage/auth-storage-provider.service";
+import { IAuthOptions } from "./i-auth-options";
+import { IAuthProviderOptions } from "./i-auth-provider-options";
+import { IAuthService } from "./i-auth-service";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
     public options: IAuthOptions = {
-        afterLoginPage: '/',
-        loginPage: '/login',
+        afterLoginPage: "/",
+        signInPage: "/sign-in",
         storage: false,
-        storageUserTable: 'users',
+        storageUserTable: "users",
     };
     public providerOptions: IAuthProviderOptions = {
         google: {
             offline: true,
-            scopes: 'profile email',
-            webClientId: 'xxxxxx.apps.googleusercontent.com',
-            signInType: 'popup'
+            scopes: "profile email",
+            signInType: "popup",
+            webClientId: "xxxxxx.apps.googleusercontent.com",
         },
     };
 
@@ -35,10 +35,10 @@ export class BaseAuthService<User extends UserModel = UserModel>
         protected router: Router,
         protected platform: Platform,
         protected authProvider: AuthProvider,
-        protected storageProvider: StorageProvider<User>,
+        protected authStorageProvider: AuthStorageProvider<User>,
     ) {
-        this.storageProvider.options.storage = this.options.storage;
-        this.storageProvider.options.userTable = this.options.storageUserTable;
+        this.authStorageProvider.options.storage = this.options.storage;
+        this.authStorageProvider.options.userTable = this.options.storageUserTable;
     }
 
     public async signInByProvider(
@@ -47,7 +47,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
     ): Promise<auth.UserCredential | null> {
         const credential = await provider.handleLogin();
         if (storeInDb && credential && credential.user !== null) {
-            await this.storageProvider
+            await this.authStorageProvider
                 .getProvider()
                 .updateStoredDataByFirebaseUser(credential.user);
         }
@@ -87,7 +87,16 @@ export class BaseAuthService<User extends UserModel = UserModel>
      * Handle sign out request
      */
     public async signOut(): Promise<void> {
-        this.authProvider;
+        const currentUser = auth().currentUser;
+        if (currentUser) {
+            const provider = await this.authProvider.getProviderByUser(
+                currentUser,
+            );
+
+            if (provider) {
+                await provider.handleSignOut();
+            }
+        }
         this.onAfterSignOut();
     }
 
@@ -95,12 +104,22 @@ export class BaseAuthService<User extends UserModel = UserModel>
      * Get user profile data
      */
     public getUser(): Observable<unknown | User | null> {
-        return this.storageProvider.getUser();
+        return this.authStorageProvider.getUser();
+    }
+
+    public setUserFactoryFunction(factory: () => any): any {
+        this.authStorageProvider.userFactory.factoryFunction = factory;
+    }
+
+    public async updateUserData(user: User) {
+        await this.authStorageProvider
+            .getProvider()
+            .updateStoredDataByUser(user);
     }
 
     protected onAfterSignOut() {
-        if (this.options.loginPage) {
-            this.router.navigate([this.options.loginPage]);
+        if (this.options.signInPage) {
+            this.router.navigate([this.options.signInPage]);
         }
     }
 

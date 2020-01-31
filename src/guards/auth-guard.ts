@@ -14,7 +14,7 @@ import { BaseAuthService } from "../services/base-auth-service";
     providedIn: "root",
 })
 export class AuthGuard implements CanActivate {
-    public loginPage = "/login";
+    public signInPage = "/sign-in";
 
     public constructor(private auth: BaseAuthService, private router: Router) {}
 
@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
             tap(loggedIn => {
                 if (!loggedIn) {
                     // Access denied
-                    this.router.navigate([this.loginPage]);
+                    this.router.navigate([this.signInPage]);
                 }
             }),
         );

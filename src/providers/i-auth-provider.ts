@@ -10,5 +10,5 @@ export interface IAuthProvider {
      */
     handleLogin(options?: any): Promise<auth.UserCredential | null>;
 
-    handleLogout(): Promise<void>;
+    handleSignOut(): Promise<void>;
 }

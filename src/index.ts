@@ -5,8 +5,11 @@ export * from "./guards/auth-guard";
 export * from "./model/firebase-user-model";
 export * from "./model/user-model";
 
+// Factories
+export * from "./factories/user-factory";
+
 // Storage
-export * from "./storage/storage-provider";
+export * from "./storage/auth-storage-provider.service";
 export * from "./storage/firebase-storage";
 
 // Providers

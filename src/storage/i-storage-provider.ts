@@ -1,5 +1,5 @@
-import * as firebase from 'firebase';
-import { Observable } from 'rxjs';
+import * as firebase from "firebase";
+import { Observable } from "rxjs";
 
 export interface IStorageProvider<User> {
     /**

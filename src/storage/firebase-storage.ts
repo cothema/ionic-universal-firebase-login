@@ -1,29 +1,31 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreDocument, } from '@angular/fire/firestore';
-import * as firebase from 'firebase';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { FirebaseUserModel, UserModel } from '..';
-import { IStorageConcreteProviderOptions } from './i-storage-concrete-provider-options';
-import { IStorageProvider } from './i-storage-provider';
-import { IStorageProviderOptions } from './i-storage-provider-options';
+import { Injectable } from "@angular/core";
+import { AngularFireAuth } from "@angular/fire/auth";
+import {
+    AngularFirestore,
+    AngularFirestoreDocument,
+} from "@angular/fire/firestore";
+import * as firebase from "firebase";
+import { Observable, of } from "rxjs";
+import { switchMap } from "rxjs/operators";
+import { FirebaseUserModel, UserModel } from "..";
+import { UserFactory } from "../factories/user-factory";
+import { IStorageConcreteProviderOptions } from "./i-storage-concrete-provider-options";
+import { IStorageProvider } from "./i-storage-provider";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class FirebaseStorage<User extends UserModel = UserModel>
     implements IStorageProvider<User> {
-
-    options: IStorageConcreteProviderOptions = {
-        userTable: 'users',
-    }
+    public options: IStorageConcreteProviderOptions = {
+        userTable: "users",
+    };
 
     public constructor(
         protected angularFireAuth: AngularFireAuth,
         protected angularFirestore: AngularFirestore,
-    ) {
-    }
+        protected userFactory: UserFactory,
+    ) {}
 
     public async updateStoredDataByUser(user: User): Promise<void> {
         if (user.uid) {
@@ -36,7 +38,7 @@ export class FirebaseStorage<User extends UserModel = UserModel>
                 uid: user.uid,
             });
 
-            return userRef.set(Object.assign({}, data), {merge: true});
+            return userRef.set(Object.assign({}, data), { merge: true });
         } else {
             return;
         }
@@ -46,7 +48,7 @@ export class FirebaseStorage<User extends UserModel = UserModel>
         userUid: string,
     ): AngularFirestoreDocument<FirebaseUserModel> {
         if (this.options.userTable === null) {
-            throw new Error('userTable is not specified!');
+            throw new Error("userTable is not specified!");
         }
 
         return this.angularFirestore
@@ -54,7 +56,9 @@ export class FirebaseStorage<User extends UserModel = UserModel>
             .doc(userUid);
     }
 
-    public updateStoredDataByFirebaseUser(firebaseUser: firebase.User): Promise<void> {
+    public updateStoredDataByFirebaseUser(
+        firebaseUser: firebase.User,
+    ): Promise<void> {
         if (firebaseUser.uid) {
             const userRef = this.getUserRef(firebaseUser.uid);
 
@@ -69,7 +73,7 @@ export class FirebaseStorage<User extends UserModel = UserModel>
                 merge: true,
             });
         } else {
-            throw new Error('Firebase user has no UID.');
+            throw new Error("Firebase user has no UID.");
         }
     }
 
@@ -112,6 +116,6 @@ export class FirebaseStorage<User extends UserModel = UserModel>
      * Override this method if you want to use custom model class
      */
     protected getNewUser(): User {
-        return new UserModel() as User;
+        return this.userFactory.create() as User;
     }
 }

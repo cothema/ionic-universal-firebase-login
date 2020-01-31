@@ -34,10 +34,13 @@ No more pain with login implementation troubles!
 - Pop up / Native
 - Redirect (not implemented at this time)
 
-**What's included?** Unified providers API, platform recognition,
-simple authentication guard, basic authentication service and
-basic user model. You can customize almost everything to your
-own needs.
+**What's included?**
+- Basic authentication service: [see documentation](./docs/features/base-auth-service.md)
+    - Unified providers API, platform recognition
+- Simple authentication guard: [see documentation](./docs/features/guard.md)
+- Basic user model
+
+You can customize almost everything to your own needs (e.g. by extending, overloading or composition).
 
 ## Contribution
 
