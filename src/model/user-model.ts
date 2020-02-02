@@ -1,6 +1,7 @@
 export class UserModel {
     public uid?: string | null;
     public email?: string | null;
+    public phoneNumber?: string | null;
     public photoURL?: string | null;
     public displayName?: string | null;
 

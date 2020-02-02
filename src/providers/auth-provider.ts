@@ -1,15 +1,17 @@
+import { Injectable } from "@angular/core";
 import * as firebase from "firebase";
-import {
-    AnonymousAuth,
-    EmailAuth,
-    FacebookAuth,
-    GithubAuth,
-    GoogleAuth,
-    TwitterAuth,
-} from "..";
+import { AnonymousAuth } from "../modules/anonymous/anonymous-auth";
+import { EmailAuth } from "../modules/email/email-auth";
+import { FacebookAuth } from "../modules/facebook/facebook-auth";
+import { GithubAuth } from "../modules/github/github-auth";
+import { GoogleAuth } from "../modules/google/google-auth";
 import { PhoneAuth } from "../modules/phone/phone-auth";
+import { TwitterAuth } from "../modules/twitter/twitter-auth";
 import { IAuthProvider } from "./i-auth-provider";
 
+@Injectable({
+    providedIn: "root",
+})
 export class AuthProvider {
     public constructor(
         public authAnonymous: AnonymousAuth,
@@ -21,7 +23,9 @@ export class AuthProvider {
         public authTwitter: TwitterAuth,
     ) {}
 
-    public getProviderById(providerId: string): IAuthProvider | null {
+    public getProviderById(
+        providerId: string | null | undefined,
+    ): IAuthProvider | null {
         switch (providerId) {
             case "password":
                 return this.authEmail;
@@ -44,11 +48,22 @@ export class AuthProvider {
         return null;
     }
 
-    public getProviderByUser(user: firebase.User): IAuthProvider | null {
+    public getProvidersByUser(user: firebase.User): IAuthProvider[] {
         if (user.isAnonymous) {
-            return this.authAnonymous;
+            return [this.authAnonymous];
         }
 
-        return this.getProviderById(user.providerId);
+        const providers: IAuthProvider[] = [];
+
+        for (const providerData of user.providerData) {
+            if (providerData) {
+                const provider = this.getProviderById(providerData.providerId);
+                if (provider) {
+                    providers.push(provider);
+                }
+            }
+        }
+
+        return providers;
     }
 }

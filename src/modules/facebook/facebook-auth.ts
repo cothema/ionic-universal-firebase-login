@@ -3,6 +3,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
+import { UniFirebaseLoginConfig } from "../../config/uni-firebase-login-config";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IFacebookAuthOptions } from "./i-facebook-auth-options";
@@ -11,9 +12,10 @@ import { IFacebookAuthOptions } from "./i-facebook-auth-options";
     providedIn: "root",
 })
 export class FacebookAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions: IFacebookAuthOptions = {
+    public readonly providerKey = "facebook";
+    public readonly defaultOptions: IFacebookAuthOptions = {
         permissions: ["public_profile"],
-        scopes: ["public_profile", "user_friends", "email"],
+        scopes: ["public_profile", "email"],
         signInType: "popup",
     };
 
@@ -21,14 +23,15 @@ export class FacebookAuth extends AbstractAuth implements IAuthProvider {
         private facebookAuth: Facebook,
         angularFireAuth: AngularFireAuth,
         platform: Platform,
+        config: UniFirebaseLoginConfig,
     ) {
-        super(angularFireAuth, platform);
+        super(angularFireAuth, platform, config);
     }
 
     public async handleNativeLogin(
         options: any,
     ): Promise<auth.UserCredential | null> {
-        const mergedOptions = Object.assign({}, this.providerOptions, options);
+        const mergedOptions = Object.assign({}, this.defaultOptions, options);
 
         const facebookResult = await this.facebookAuth.login(
             mergedOptions.scopes,
@@ -51,10 +54,10 @@ export class FacebookAuth extends AbstractAuth implements IAuthProvider {
      * @param facebookUserId
      */
     public fetchUser(facebookUserId: string): Promise<any> {
-        const scopes = this.providerOptions.scopes.join(",");
+        const scopes = this.defaultOptions.scopes.join(",");
         return this.facebookAuth.api(
             `/${facebookUserId}/?fields=${scopes}`,
-            this.providerOptions.permissions,
+            this.defaultOptions.permissions,
         );
     }
 

@@ -1,3 +1,3 @@
 export interface IAuthOptions {
-    signInType: "popup" | "redirect";
+    signInType?: "popup" | "redirect";
 }

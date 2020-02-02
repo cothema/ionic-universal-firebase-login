@@ -1,15 +1,27 @@
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { IAuthProvider } from "./i-auth-provider";
 
 export abstract class AbstractAuth implements IAuthProvider {
-    public readonly providerOptions: any;
+    public abstract readonly providerKey:
+        | "anonymous"
+        | "email"
+        | "facebook"
+        | "github"
+        | "google"
+        | "phone"
+        | "twitter";
+    public readonly defaultOptions: any = {};
 
     protected constructor(
         protected angularFireAuth: AngularFireAuth,
         protected platform: Platform,
-    ) {}
+        protected config: UniFirebaseLoginConfig,
+    ) {
+        this.applyDefaultOptions();
+    }
 
     public abstract handleNativeLogin(
         options: any,
@@ -45,7 +57,7 @@ export abstract class AbstractAuth implements IAuthProvider {
         const provider = this.getBrowserLoginProvider();
         const authX = this.angularFireAuth.auth;
 
-        switch (this.providerOptions.signInType) {
+        switch (this.defaultOptions.signInType) {
             case "popup":
                 return await authX.signInWithPopup(provider);
             case "redirect":
@@ -55,6 +67,19 @@ export abstract class AbstractAuth implements IAuthProvider {
         }
 
         throw new Error("Invalid signInType!");
+    }
+
+    /**
+     * Apply default options to configuration for the provider
+     */
+    protected applyDefaultOptions(): any {
+        if (this.config.providers[this.providerKey] === undefined) {
+            this.config.providers[this.providerKey] = {};
+        }
+        return Object.assign(
+            this.config.providers[this.providerKey],
+            this.defaultOptions,
+        );
     }
 
     protected abstract getBrowserLoginProvider(): any | null;

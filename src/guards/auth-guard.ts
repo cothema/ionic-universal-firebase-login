@@ -2,39 +2,54 @@ import { Injectable } from "@angular/core";
 import {
     ActivatedRouteSnapshot,
     CanActivate,
+    CanActivateChild,
     Router,
     RouterStateSnapshot,
-    UrlTree,
 } from "@angular/router";
-import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
+import { UserModel } from "../model/user-model";
 import { BaseAuthService } from "../services/base-auth-service";
 
 @Injectable({
     providedIn: "root",
 })
-export class AuthGuard implements CanActivate {
-    public signInPage = "/sign-in";
+export class AuthGuard<User extends UserModel = UserModel>
+    implements CanActivate, CanActivateChild {
+    public constructor(
+        protected auth: BaseAuthService<User>,
+        protected router: Router,
+        protected config: UniFirebaseLoginConfig,
+    ) {}
 
-    public constructor(private auth: BaseAuthService, private router: Router) {}
-
-    public canActivate(
+    public async canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
-    ):
-        | Observable<boolean | UrlTree>
-        | Promise<boolean | UrlTree>
-        | boolean
-        | UrlTree {
-        return this.auth.getUser().pipe(
-            take(1),
-            map(user => !!user), // Map to boolean
-            tap(loggedIn => {
-                if (!loggedIn) {
-                    // Access denied
-                    this.router.navigate([this.signInPage]);
-                }
-            }),
-        );
+    ): Promise<boolean> {
+        const user$ = this.auth.getUser();
+
+        return user$
+            .pipe(
+                take(1),
+                map(user => !!user), // Map to boolean
+                tap(loggedIn => {
+                    if (!loggedIn) {
+                        // Access denied
+                        const redirectTo = this.config.signInPage;
+                        console.log(
+                            `Insufficient permissions, redirecting to: ${redirectTo}`,
+                        );
+                        return this.router.navigate([redirectTo]);
+                    }
+                }),
+            )
+            .toPromise();
+    }
+
+    public canActivateChild(
+        next: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot,
+    ): Promise<boolean> {
+        return this.canActivate(next, state);
     }
 }

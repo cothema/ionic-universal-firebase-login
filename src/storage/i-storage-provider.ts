@@ -5,12 +5,12 @@ export interface IStorageProvider<User> {
     /**
      * Fetch user profile data.
      */
-    fetchUser(): Promise<unknown | User | null>;
+    fetchUser(): Promise<User | null>;
 
     /**
      * Fetch user profile data and subscribe user changes.
      */
-    subscribeUser(): Observable<unknown | User | null>;
+    subscribeUser(): Observable<User | null>;
 
     /**
      * Store user profile data for further use.

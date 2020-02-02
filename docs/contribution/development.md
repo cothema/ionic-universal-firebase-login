@@ -11,6 +11,7 @@
 npm install
 ````
 - Do your changes and write tests if possible
+    - Be sure you don't import classes from index.ts, but from class files directly.
 - Run tests
 ```` bash
 npm test

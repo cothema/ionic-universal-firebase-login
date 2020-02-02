@@ -7,9 +7,9 @@ import {
 import * as firebase from "firebase";
 import { Observable, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
-import { FirebaseUserModel, UserModel } from "..";
-import { UserFactory } from "../factories/user-factory";
-import { IStorageConcreteProviderOptions } from "./i-storage-concrete-provider-options";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
+import { StorageUserModel } from "../model/storage-user-model";
+import { UserModel } from "../model/user-model";
 import { IStorageProvider } from "./i-storage-provider";
 
 @Injectable({
@@ -17,79 +17,67 @@ import { IStorageProvider } from "./i-storage-provider";
 })
 export class FirebaseStorage<User extends UserModel = UserModel>
     implements IStorageProvider<User> {
-    public options: IStorageConcreteProviderOptions = {
-        userTable: "users",
-    };
-
     public constructor(
         protected angularFireAuth: AngularFireAuth,
         protected angularFirestore: AngularFirestore,
-        protected userFactory: UserFactory,
+        protected config: UniFirebaseLoginConfig,
     ) {}
 
     public async updateStoredDataByUser(user: User): Promise<void> {
         if (user.uid) {
             const userRef = this.getUserRef(user.uid);
 
-            const data = new FirebaseUserModel({
-                displayName: user.displayName,
-                email: user.email,
-                photoURL: user.photoURL,
-                uid: user.uid,
-            });
+            const data = this.config.storageUserFactoryFunc(
+                this.config.mapUserToStorageFunc(user),
+            );
 
-            return userRef.set(Object.assign({}, data), { merge: true });
-        } else {
-            return;
-        }
-    }
-
-    public getUserRef(
-        userUid: string,
-    ): AngularFirestoreDocument<FirebaseUserModel> {
-        if (this.options.userTable === null) {
-            throw new Error("userTable is not specified!");
-        }
-
-        return this.angularFirestore
-            .collection(this.options.userTable)
-            .doc(userUid);
-    }
-
-    public updateStoredDataByFirebaseUser(
-        firebaseUser: firebase.User,
-    ): Promise<void> {
-        if (firebaseUser.uid) {
-            const userRef = this.getUserRef(firebaseUser.uid);
-
-            const data = new FirebaseUserModel({
-                displayName: firebaseUser.displayName,
-                email: firebaseUser.email,
-                photoURL: firebaseUser.photoURL,
-                uid: firebaseUser.uid,
-            });
-
-            return userRef.set(Object.assign({}, data), {
-                merge: true,
-            });
+            await userRef.set(Object.assign({}, data), { merge: true });
         } else {
             throw new Error("Firebase user has no UID.");
         }
     }
 
-    public fetchUser(): Promise<User | unknown | null> {
+    public getUserRef(
+        userUid: string,
+    ): AngularFirestoreDocument<StorageUserModel> {
+        if (this.config.storageUserTable === null) {
+            throw new Error("userTable is not specified!");
+        }
+
+        return this.angularFirestore
+            .collection(this.config.storageUserTable)
+            .doc(userUid);
+    }
+
+    public async updateStoredDataByFirebaseUser(
+        firebaseUser: firebase.User,
+    ): Promise<void> {
+        if (firebaseUser.uid) {
+            const userRef = this.getUserRef(firebaseUser.uid);
+
+            const data = this.config.storageUserFactoryFunc(
+                this.config.mapFirebaseUserToStorageFunc(firebaseUser),
+            );
+
+            await userRef.set(Object.assign({}, data), { merge: true });
+        } else {
+            throw new Error("Firebase user has no UID.");
+        }
+    }
+
+    public async fetchUser(): Promise<User | null> {
         return this.subscribeUser().toPromise();
     }
 
-    public subscribeUser(): Observable<User | unknown | null> {
+    public subscribeUser(): Observable<User | null> {
         // Get the auth state, then fetch the Firestore user document or return null
         return this.angularFireAuth.authState.pipe(
             switchMap((user: any) => {
                 if (user) {
                     // User is logged in
                     return this.angularFirestore
-                        .doc<FirebaseUserModel>(
-                            `${this.options.userTable}/${user.uid}`,
+                        .doc<StorageUserModel>(
+                            `${this.config.storageUserTable}/${user.uid}`,
                         )
                         .valueChanges()
                         .pipe(
@@ -109,13 +97,13 @@ export class FirebaseStorage<User extends UserModel = UserModel>
                 // Logged out
                 return of(null);
             }),
-        );
+        ) as Observable<User | null>;
     }
 
     /**
      * Override this method if you want to use custom model class
      */
     protected getNewUser(): User {
-        return this.userFactory.create() as User;
+        return this.config.userFactoryFunc() as User;
     }
 }

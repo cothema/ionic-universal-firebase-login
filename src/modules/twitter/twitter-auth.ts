@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
+import { UniFirebaseLoginConfig } from "../../config/uni-firebase-login-config";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 
@@ -9,10 +10,15 @@ import { IAuthProvider } from "../../providers/i-auth-provider";
     providedIn: "root",
 })
 export class TwitterAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions = {};
+    public readonly providerKey = "twitter";
+    public readonly defaultOptions = {};
 
-    public constructor(angularFireAuth: AngularFireAuth, platform: Platform) {
-        super(angularFireAuth, platform);
+    public constructor(
+        angularFireAuth: AngularFireAuth,
+        platform: Platform,
+        config: UniFirebaseLoginConfig,
+    ) {
+        super(angularFireAuth, platform, config);
     }
 
     public async handleNativeLogin(

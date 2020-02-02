@@ -42,9 +42,91 @@ No more pain with login implementation troubles!
 
 You can customize almost everything to your own needs (e.g. by extending, overloading or composition).
 
-## Contribution
 
-**Feel free to send pull requests or create new issues.**
+### Configuration
+
+Override or change `options` property of BaseAuthService
+
+| Option name | Default value | Description
+| --- | --- | ---
+| afterSignInPage | "/" | Path where user will be redirected after successful sign in. If false, no redirect will be done.
+| providers | {} | List of provider configurations. See example configuration.
+| signInPage | "/sign-in" | Path where user will be redirected when sign in is required (and after logout). If false, no redirect will be done.
+| storage | false | You can store user profile data in Firestore ('firestore') or nowhere (false).
+| storageUserTable | "users" | If you specify storage, than this table name / key will be used.
+| mapUserToStorageFunc | | You can use custom strategy to map user model to storage. See example configuration.
+| storageUserFactoryFunc | | You can use custom model object for user in storage. See example configuration. 
+| userFactoryFunc | | You can use custom model object for user. See example configuration.
+
+#### Example configuration
+``` typescript
+import { NgModule } from "@angular/core";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { FacebookAuthModule, GoogleAuthModule, UniFirebaseLoginModule } from "ionic-universal-firebase-login";
+import { environment } from "../environments/environment";
+import { FirestorePlayer } from "./model/firestore-player.model";
+import { Player } from "./model/player.model";
+import * as firebase from "firebase";
+
+export function mapUserToStorageFunc(user: Player) {
+    return storageUserFactoryFunc({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        lang: user.lang,
+        musicEnabled: user.musicEnabled,
+        nickname: user.nickname,
+    });
+}
+
+export function mapFirebaseUserToStorageFunc(user: firebase.User) {
+    return storageUserFactoryFunc({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+    });
+}
+
+export function userFactoryFunc(): Player {
+    return new Player();
+}
+
+export function storageUserFactoryFunc(
+    data: Partial<FirestorePlayer>,
+): FirestorePlayer {
+    return new FirestorePlayer(data);
+}
+
+@NgModule({
+    imports: [
+        ...
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule,
+        UniFirebaseLoginModule.forRoot({
+            storage: "firestore",
+            storageUserTable: "players",
+            signInPage: "login",
+            providers: {
+                google: {
+                    webClientId: "xxxxx.apps.googleusercontent.com",
+                },
+            },
+            userFactoryFunc,
+            mapFirebaseUserToStorageFunc,
+            storageUserFactoryFunc,
+            mapUserToStorageFunc,
+        }),
+        GoogleAuthModule,
+        FacebookAuthModule,
+    ],
+    ...
+})
+export class AppModule {
+}
+```
 
 ## Installation
 
@@ -116,9 +198,14 @@ import {GoogleAuthModule, FacebookAuthModule} from 'ionic-universal-firebase-log
 
 See [examples/](examples/) folder
 
+
 ## Changelog
 
 [See CHANGELOG.md](CHANGELOG.md)
+
+## Contribution
+
+**Feel free to send pull requests or create new issues.**
 
 ## License
 

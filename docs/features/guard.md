@@ -8,4 +8,4 @@ Purpose of the guard is to allow users to enter only pages that are allowed.
 
 In case you want to customize its behavior, you can extend this class and customize it.
 
-
+**It is not required to use the guard.** If you want, you can omit it.

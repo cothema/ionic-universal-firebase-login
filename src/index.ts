@@ -2,17 +2,16 @@
 export * from "./guards/auth-guard";
 
 // Model
-export * from "./model/firebase-user-model";
+export * from "./model/storage-user-model";
 export * from "./model/user-model";
-
-// Factories
-export * from "./factories/user-factory";
 
 // Storage
 export * from "./storage/auth-storage-provider.service";
 export * from "./storage/firebase-storage";
+export * from "./storage/in-memory-storage.service";
 
 // Providers
+export * from "./providers/abstract-auth";
 export * from "./providers/auth-provider";
 export * from "./modules/anonymous/anonymous-auth";
 export * from "./modules/email/email-auth";
@@ -33,3 +32,6 @@ export * from "./modules/github/github-auth.module";
 export * from "./modules/google/google-auth.module";
 export * from "./modules/phone/phone-auth.module";
 export * from "./modules/twitter/twitter-auth.module";
+
+export * from "./config/uni-firebase-login-config";
+export * from "./modules/uni-firebase-login.module";

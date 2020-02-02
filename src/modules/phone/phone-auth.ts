@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
+import { UniFirebaseLoginConfig } from "../../config/uni-firebase-login-config";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IPhoneAuthOptions } from "./i-phone-auth-options";
@@ -10,12 +11,17 @@ import { IPhoneAuthOptions } from "./i-phone-auth-options";
     providedIn: "root",
 })
 export class PhoneAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerOptions: IPhoneAuthOptions = {
+    public readonly providerKey = "phone";
+    public readonly defaultOptions: IPhoneAuthOptions = {
         signInType: "popup",
     };
 
-    public constructor(angularFireAuth: AngularFireAuth, platform: Platform) {
-        super(angularFireAuth, platform);
+    public constructor(
+        angularFireAuth: AngularFireAuth,
+        platform: Platform,
+        config: UniFirebaseLoginConfig,
+    ) {
+        super(angularFireAuth, platform, config);
     }
 
     public async handleNativeLogin(

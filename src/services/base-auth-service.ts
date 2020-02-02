@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Platform } from "@ionic/angular";
+import * as firebase from "firebase";
 import { auth } from "firebase/app";
 import { Observable } from "rxjs";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UserModel } from "../model/user-model";
 import { AuthProvider } from "../providers/auth-provider";
 import { IAuthProvider } from "../providers/i-auth-provider";
 import { AuthStorageProvider } from "../storage/auth-storage-provider.service";
-import { IAuthOptions } from "./i-auth-options";
-import { IAuthProviderOptions } from "./i-auth-provider-options";
 import { IAuthService } from "./i-auth-service";
 
 @Injectable({
@@ -16,71 +16,130 @@ import { IAuthService } from "./i-auth-service";
 })
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
-    public options: IAuthOptions = {
-        afterLoginPage: "/",
-        signInPage: "/sign-in",
-        storage: false,
-        storageUserTable: "users",
-    };
-    public providerOptions: IAuthProviderOptions = {
-        google: {
-            offline: true,
-            scopes: "profile email",
-            signInType: "popup",
-            webClientId: "xxxxxx.apps.googleusercontent.com",
-        },
-    };
-
     public constructor(
         protected router: Router,
         protected platform: Platform,
         protected authProvider: AuthProvider,
         protected authStorageProvider: AuthStorageProvider<User>,
-    ) {
-        this.authStorageProvider.options.storage = this.options.storage;
-        this.authStorageProvider.options.userTable = this.options.storageUserTable;
-    }
+        protected config: UniFirebaseLoginConfig,
+    ) {}
 
     public async signInByProvider(
         provider: IAuthProvider,
-        storeInDb = false,
-    ): Promise<auth.UserCredential | null> {
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
         const credential = await provider.handleLogin();
-        if (storeInDb && credential && credential.user !== null) {
+        if (
+            this.config.storage !== false &&
+            credential &&
+            credential.user !== null
+        ) {
             await this.authStorageProvider
                 .getProvider()
                 .updateStoredDataByFirebaseUser(credential.user);
         }
-        this.onAfterLogin();
-        return credential;
+        await callbackBeforeRedirect(credential);
+        if (redirect) {
+            await this.redirectAfterLogin();
+        }
     }
 
-    public async signInAnonymously(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authAnonymous);
+    public async signInAnonymously(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authAnonymous,
+            redirect,
+            callbackBeforeRedirect,
+        );
     }
 
-    public async signInViaEmail(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authEmail);
+    public async signInViaEmail(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authEmail,
+            redirect,
+            callbackBeforeRedirect,
+        );
     }
 
-    public async signInViaFacebook(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authFacebook);
+    public async signInViaFacebook(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authFacebook,
+            redirect,
+            callbackBeforeRedirect,
+        );
     }
 
-    public async signInViaGithub(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authGithub);
+    public async signInViaGithub(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authGithub,
+            redirect,
+            callbackBeforeRedirect,
+        );
     }
 
-    public async signInViaGoogle(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authGoogle);
+    public async signInViaGoogle(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authGoogle,
+            redirect,
+            callbackBeforeRedirect,
+        );
     }
 
-    public async signInViaPhone(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authPhone);
+    public async signInViaPhone(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authPhone,
+            redirect,
+            callbackBeforeRedirect,
+        );
     }
 
-    public async signInViaTwitter(storeInDb = false): Promise<any> {
-        return this.signInByProvider(this.authProvider.authTwitter);
+    public async signInViaTwitter(
+        redirect: boolean = true,
+        callbackBeforeRedirect: (
+            credential: auth.UserCredential | null,
+        ) => Promise<void> | void = () => undefined,
+    ): Promise<void> {
+        await this.signInByProvider(
+            this.authProvider.authTwitter,
+            redirect,
+            callbackBeforeRedirect,
+        );
+    }
+
+    public get currentFirebaseUser(): firebase.User | null {
+        return firebase.auth().currentUser;
     }
 
     /**
@@ -88,27 +147,26 @@ export class BaseAuthService<User extends UserModel = UserModel>
      */
     public async signOut(): Promise<void> {
         const currentUser = auth().currentUser;
-        if (currentUser) {
-            const provider = await this.authProvider.getProviderByUser(
-                currentUser,
-            );
 
-            if (provider) {
+        if (currentUser) {
+            const providers = this.authProvider.getProvidersByUser(currentUser);
+
+            for (const provider of providers) {
                 await provider.handleSignOut();
             }
         }
-        this.onAfterSignOut();
+        await this.redirectAfterSignOut();
     }
 
     /**
      * Get user profile data
      */
-    public getUser(): Observable<unknown | User | null> {
-        return this.authStorageProvider.getUser();
-    }
-
-    public setUserFactoryFunction(factory: () => any): any {
-        this.authStorageProvider.userFactory.factoryFunction = factory;
+    public getUser(fromCache: boolean = true): Observable<User | null> {
+        if (fromCache) {
+            return this.authStorageProvider.getUser();
+        } else {
+            return this.authStorageProvider.getUserNonCached();
+        }
     }
 
     public async updateUserData(user: User) {
@@ -117,15 +175,16 @@ export class BaseAuthService<User extends UserModel = UserModel>
             .updateStoredDataByUser(user);
     }
 
-    protected onAfterSignOut() {
-        if (this.options.signInPage) {
-            this.router.navigate([this.options.signInPage]);
+    protected async redirectAfterSignOut() {
+        if (this.config.signInPage) {
+            await this.router.navigate([this.config.signInPage]);
         }
     }
 
-    protected onAfterLogin() {
-        if (this.options.afterLoginPage) {
-            this.router.navigate([this.options.afterLoginPage]);
+    protected async redirectAfterLogin() {
+        if (this.config.afterSignInPage) {
+            console.log("Redirect ", this.config.afterSignInPage);
+            await this.router.navigate([this.config.afterSignInPage]);
         }
     }
 }
