@@ -3,7 +3,7 @@ import { Cacheable } from "ngx-cacheable";
 import { Observable } from "rxjs";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UserModel } from "../model/user-model";
-import { FirebaseStorage } from "./firebase-storage";
+import { FirestoreStorage } from "./firestore-storage.service";
 import { IStorageProvider } from "./i-storage-provider";
 import { InMemoryStorage } from "./in-memory-storage.service";
 
@@ -12,7 +12,7 @@ import { InMemoryStorage } from "./in-memory-storage.service";
 })
 export class AuthStorageProvider<User extends UserModel = UserModel> {
     public constructor(
-        protected firebaseStorage: FirebaseStorage<User>,
+        protected firestoreStorage: FirestoreStorage<User>,
         protected inMemoryStorage: InMemoryStorage<User>,
         protected config: UniFirebaseLoginConfig,
     ) {}
@@ -45,7 +45,7 @@ export class AuthStorageProvider<User extends UserModel = UserModel> {
         let provider;
         switch (providerId) {
             case "firestore":
-                provider = this.firebaseStorage;
+                provider = this.firestoreStorage;
                 break;
             case false:
                 provider = this.inMemoryStorage;

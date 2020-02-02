@@ -7,7 +7,7 @@ export * from "./model/user-model";
 
 // Storage
 export * from "./storage/auth-storage-provider.service";
-export * from "./storage/firebase-storage";
+export * from "./storage/firestore-storage.service";
 export * from "./storage/in-memory-storage.service";
 
 // Providers

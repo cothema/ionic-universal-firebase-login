@@ -78,7 +78,6 @@
         "ngx-cacheable": "^1.3.2",
         "prettier": "^1.19.1",
         "puppeteer": "^2.1.0",
-        "puppeteer-core": "^2.1.0",
         "rxjs": "^6.5.4",
         "tslint": "^5.20.1",
         "tslint-config-prettier": "^1.18.0",

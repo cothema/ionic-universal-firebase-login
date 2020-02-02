@@ -15,7 +15,7 @@ import { IStorageProvider } from "./i-storage-provider";
 @Injectable({
     providedIn: "root",
 })
-export class FirebaseStorage<User extends UserModel = UserModel>
+export class FirestoreStorage<User extends UserModel = UserModel>
     implements IStorageProvider<User> {
     public constructor(
         protected angularFireAuth: AngularFireAuth,
@@ -31,7 +31,9 @@ export class FirebaseStorage<User extends UserModel = UserModel>
                 this.config.mapUserToStorageFunc(user),
             );
 
-            await userRef.set(Object.assign({}, data), { merge: true });
+            await userRef.set(JSON.parse(JSON.stringify(data)), {
+                merge: true,
+            });
         } else {
             throw new Error("Firebase user has no UID.");
         }
@@ -59,7 +61,9 @@ export class FirebaseStorage<User extends UserModel = UserModel>
                 this.config.mapFirebaseUserToStorageFunc(firebaseUser),
             );
 
-            await userRef.set(Object.assign({}, data), { merge: true });
+            await userRef.set(JSON.parse(JSON.stringify(data)), {
+                merge: true,
+            });
         } else {
             throw new Error("Firebase user has no UID.");
         }
