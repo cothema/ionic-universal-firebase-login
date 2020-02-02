@@ -9,7 +9,8 @@
         "build": "mkdir -p pkg && pika build --verbose && ng build",
         "lint": "tslint -p . --fix",
         "pub": "pika publish",
-        "test": "ng test"
+        "test": "ng test",
+        "version": "npm run build"
     },
     "keywords": [
         "ionic",
