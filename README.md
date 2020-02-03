@@ -59,7 +59,7 @@ Override or change `options` property of BaseAuthService
 | userFactoryFunc | | You can use custom model object for user. See example configuration.
 
 #### Example configuration
-``` typescript
+```typescript
 import { NgModule } from "@angular/core";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
@@ -135,20 +135,18 @@ It is required for native authentication on Android and iOS.
 
 Install with `npm`:
 
-``` bash
+```bash
 npm install firebase @angular/fire ionic-universal-firebase-login ngx-cacheable
 ```
 
-- Go to https://firebase.google.com/ and create an account for your app 
-if you don't have it already.
-  - Create Web app, Android app (optionally) and iOS app (optionally)
-  - In the second step of app creation copy values from firebaseConfig object
-  (if you already have created your app you can also get configuration in
-  your Firebase app settings -> General tab -> select web app project -> copy
-  Firebase SDK snippet - Config format).
-  Configuration is the same for all platforms (apps) - e.g. browser and Android;
-  so you have to do this step only once.
-- Edit `src/environments/environment.ts` and copy the config from previous step as in
+- Go to https://firebase.google.com/ → **create a new Firebase project** 
+(if you don't have it already).
+  - Project overview → **Create Web app**
+  - **Firebase settings → General tab → Web app project (at the bottom)
+   → Config → copy Firebase SDK snippet**
+  (Configuration is the same for all platforms,
+  so you have to do this step only once.)
+- Edit `src/environments/environment.ts` and paste the config from previous step as in
 example below:
 
 ```typescript
@@ -169,7 +167,8 @@ export const environment = {
 
 - Edit `src/app/app.module.ts` and add:
 
-```` typescript
+````typescript
+import { NgModule } from '@angular/core'; 
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import {GoogleAuthModule, FacebookAuthModule} from 'ionic-universal-firebase-login';
@@ -185,19 +184,57 @@ import {GoogleAuthModule, FacebookAuthModule} from 'ionic-universal-firebase-log
 })
 ````
 
-- Guide for Android SHA-1 and SHA256 generation: https://developers.google.com/android/guides/client-auth
-- Enter SHA1 key in the first step of Android app creation. SHA256 is used for Firestore in next steps. 
+**App for Android platform:**
+- Create Android app in Firebase similarly as Web app
+- Android package name have to be same as you have in `config.xml` (`<widget id="..."`). If you have
+ some default package id in `config.xml`, edit it.
+- If you don't have SHA-1 key, see guide for Android:
+  - Create your keystore with a key: https://coderwall.com/p/r09hoq/android-generate-release-debug-keystores
+  - Get SHA-1 from your keystore: https://developers.google.com/android/guides/client-auth
+- Enter SHA1 key in the first step of Android app creation. 
 - Click to Download google-services.json and copy it to your project root 
 - Skip last (4th) step, because its for Android Studio project only.
 
-- See our guide for each provider:
-  - [Google - see guide](docs/google.md)
-  - [Facebook - see guide](docs/facebook.md)
+**See our guide for each provider:**
+  - [Google - see guide](docs/providers/google.md)
+  - [Facebook - see guide](docs/providers/facebook.md)
+
+- Use `AuthGuard` in your router like this:
+````typescript
+import { NgModule } from "@angular/core";
+import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
+import { AuthGuard } from "ionic-universal-firebase-login";
+
+const routes: Routes = [
+  {
+    path: "",
+    loadChildren: () =>
+      import("./home.module").then(m => m.HomePageModule),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+  },
+  {
+    path: "sign-in",
+    loadChildren: () => import("./sign-in/sign-in.module").then(m => m.SignInPageModule),
+  },
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+  ],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {
+}
+````
 
 ## Example implementations
 
-See [examples/](examples/) folder
+_See [examples/](examples/) folder_
 
+**Real use cases:**
+- https://gitlab.com/cothema/cook-pocket
 
 ## Changelog
 

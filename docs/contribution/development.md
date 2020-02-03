@@ -7,17 +7,17 @@
 #### Before you begin
 
 - Install dependencies
-```` bash
+````bash
 npm install
 ````
 - Do your changes and write tests if possible
     - Be sure you don't import classes from index.ts, but from class files directly.
 - Run tests
-```` bash
+````bash
 npm test
 ````
 - Build package (to pkg/ folder)
-``` bash
+```bash
 npm run build
 ```
 - If you want to test library before new version is published,
@@ -37,6 +37,6 @@ to your project's `node_modules/ionic-universal-firebase-login`
 _Only for NPM package admins._
 
 **Publish new package version:**
-```` bash
+````bash
 npm run pub
 ````
