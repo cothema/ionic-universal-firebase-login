@@ -7,9 +7,7 @@ import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IEmailAuthOptions } from "./i-email-auth-options";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class EmailAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "email";
     public readonly defaultOptions: IEmailAuthOptions = {

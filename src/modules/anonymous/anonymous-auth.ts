@@ -7,9 +7,7 @@ import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IAnonymousAuthOptions } from "./i-anonymous-auth-options";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class AnonymousAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "anonymous";
     public readonly defaultOptions: IAnonymousAuthOptions = {};

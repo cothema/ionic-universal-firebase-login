@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Optional } from '@angular/core';
 import * as firebase from "firebase";
 import { AnonymousAuth } from "../modules/anonymous/anonymous-auth";
 import { EmailAuth } from "../modules/email/email-auth";
@@ -14,13 +14,13 @@ import { IAuthProvider } from "./i-auth-provider";
 })
 export class AuthProvider {
     public constructor(
-        public authAnonymous: AnonymousAuth,
-        public authEmail: EmailAuth,
-        public authFacebook: FacebookAuth,
-        public authGithub: GithubAuth,
-        public authGoogle: GoogleAuth,
-        public authPhone: PhoneAuth,
-        public authTwitter: TwitterAuth,
+        @Optional() public authAnonymous: AnonymousAuth,
+        @Optional() public authEmail: EmailAuth,
+        @Optional() public authFacebook: FacebookAuth,
+        @Optional() public authGithub: GithubAuth,
+        @Optional() public authGoogle: GoogleAuth,
+        @Optional() public authPhone: PhoneAuth,
+        @Optional() public authTwitter: TwitterAuth,
     ) {}
 
     public getProviderById(

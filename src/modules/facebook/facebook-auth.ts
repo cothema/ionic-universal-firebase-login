@@ -8,9 +8,7 @@ import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IFacebookAuthOptions } from "./i-facebook-auth-options";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class FacebookAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "facebook";
     public readonly defaultOptions: IFacebookAuthOptions = {

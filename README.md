@@ -171,13 +171,14 @@ export const environment = {
 import { NgModule } from '@angular/core'; 
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
-import {GoogleAuthModule, FacebookAuthModule} from 'ionic-universal-firebase-login';
+import {UniFirebaseLoginModule, GoogleAuthModule, FacebookAuthModule} from 'ionic-universal-firebase-login';
 
 @NgModule({
     ...
     imports: [
         ...
         AngularFireModule.initializeApp(environment.firebase),
+        UniFirebaseLoginModule.forRoot(),
         GoogleAuthModule, // if you want to use Google as a provider
         FacebookAuthModule, // if you want to use Facebook as a provider
     ]

@@ -7,9 +7,7 @@ import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IGithubAuthOptions } from "./i-github-auth-options";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class GithubAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "github";
     public readonly defaultOptions: IGithubAuthOptions = {

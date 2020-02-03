@@ -7,9 +7,7 @@ import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IPhoneAuthOptions } from "./i-phone-auth-options";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class PhoneAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "phone";
     public readonly defaultOptions: IPhoneAuthOptions = {

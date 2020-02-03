@@ -8,9 +8,7 @@ import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IGoogleAuthOptions } from "./i-google-auth-options";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class GoogleAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "google";
     public readonly defaultOptions: IGoogleAuthOptions = {

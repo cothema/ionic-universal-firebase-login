@@ -6,9 +6,7 @@ import { UniFirebaseLoginConfig } from "../../config/uni-firebase-login-config";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class TwitterAuth extends AbstractAuth implements IAuthProvider {
     public readonly providerKey = "twitter";
     public readonly defaultOptions = {};
