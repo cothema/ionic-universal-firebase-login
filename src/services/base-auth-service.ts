@@ -1,28 +1,33 @@
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { Platform } from "@ionic/angular";
-import * as firebase from "firebase";
-import { auth } from "firebase/app";
-import { Observable } from "rxjs";
-import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
-import { UserModel } from "../model/user-model";
-import { AuthProvider } from "../providers/auth-provider";
-import { IAuthProvider } from "../providers/i-auth-provider";
-import { AuthStorageProvider } from "../storage/auth-storage-provider.service";
-import { IAuthService } from "./i-auth-service";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
+import * as firebase from 'firebase';
+import { auth } from 'firebase/app';
+import { Observable } from 'rxjs';
+import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
+import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
+import { UserModel } from '../model/user-model';
+import { AuthProvider } from '../providers/auth-provider';
+import { IAuthProvider } from '../providers/i-auth-provider';
+import { AuthStorageProvider } from '../storage/auth-storage-provider.service';
+import { IAuthService } from './i-auth-service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
+    protected config: UniFirebaseLoginConfig;
+
     public constructor(
         protected router: Router,
         protected platform: Platform,
         protected authProvider: AuthProvider,
         protected authStorageProvider: AuthStorageProvider<User>,
-        protected config: UniFirebaseLoginConfig,
-    ) {}
+        configProvider: UniFirebaseLoginConfigProvider,
+    ) {
+        this.config = configProvider.config;
+    }
 
     public async signInByProvider(
         provider: IAuthProvider,
@@ -183,7 +188,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
 
     protected async redirectAfterLogin() {
         if (this.config.afterSignInPage) {
-            console.log("Redirect ", this.config.afterSignInPage);
+            console.log('Redirect ', this.config.afterSignInPage);
             await this.router.navigate([this.config.afterSignInPage]);
         }
     }

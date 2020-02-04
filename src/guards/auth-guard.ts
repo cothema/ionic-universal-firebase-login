@@ -1,26 +1,25 @@
-import { Injectable } from "@angular/core";
-import {
-    ActivatedRouteSnapshot,
-    CanActivate,
-    CanActivateChild,
-    Router,
-    RouterStateSnapshot,
-} from "@angular/router";
-import { map, take, tap } from "rxjs/operators";
-import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
-import { UserModel } from "../model/user-model";
-import { BaseAuthService } from "../services/base-auth-service";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, } from '@angular/router';
+import { map, take, tap } from 'rxjs/operators';
+import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
+import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
+import { UserModel } from '../model/user-model';
+import { BaseAuthService } from '../services/base-auth-service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class AuthGuard<User extends UserModel = UserModel>
     implements CanActivate, CanActivateChild {
+    protected config: UniFirebaseLoginConfig;
+
     public constructor(
         protected auth: BaseAuthService<User>,
         protected router: Router,
-        protected config: UniFirebaseLoginConfig,
-    ) {}
+        configProvider: UniFirebaseLoginConfigProvider,
+    ) {
+        this.config = configProvider.config;
+    }
 
     public async canActivate(
         next: ActivatedRouteSnapshot,

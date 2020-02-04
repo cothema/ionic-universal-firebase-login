@@ -3,7 +3,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { Platform } from "@ionic/angular";
 import { auth } from "firebase/app";
-import { UniFirebaseLoginConfig } from "../../config/uni-firebase-login-config";
+import { UniFirebaseLoginConfigProvider } from "../../config/uni-firebase-login-config-provider";
 import { AbstractAuth } from "../../providers/abstract-auth";
 import { IAuthProvider } from "../../providers/i-auth-provider";
 import { IFacebookAuthOptions } from "./i-facebook-auth-options";
@@ -21,7 +21,7 @@ export class FacebookAuth extends AbstractAuth implements IAuthProvider {
         private facebookAuth: Facebook,
         angularFireAuth: AngularFireAuth,
         platform: Platform,
-        config: UniFirebaseLoginConfig,
+        config: UniFirebaseLoginConfigProvider,
     ) {
         super(angularFireAuth, platform, config);
     }

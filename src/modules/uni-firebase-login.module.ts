@@ -1,13 +1,10 @@
-import {
-    ModuleWithProviders,
-    NgModule,
-    Optional,
-    SkipSelf,
-} from "@angular/core";
-import { StorageUserModel, UserModel } from "..";
-import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
-import { UniFirebaseLoginConfigDefaults } from "../config/uni-firebase-login-config-defaults";
-import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config";
+import { ModuleWithProviders, NgModule, Optional, SkipSelf, } from '@angular/core';
+import { UniFirebaseLoginConfigDefaults } from '../config/uni-firebase-login-config-defaults';
+import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
+import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
+import { StorageUserModel } from '../model/storage-user-model';
+import { UserModel } from '../model/user-model';
+import { IUniFirebaseLoginConfig } from '../services/i-uni-firebase-login-config';
 
 @NgModule({
     declarations: [],
@@ -15,21 +12,15 @@ import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config
     imports: [],
     providers: [],
 })
-export class UniFirebaseLoginModule<
-    User extends UserModel = UserModel,
-    StorageUser extends StorageUserModel = StorageUserModel
-> {
+export class UniFirebaseLoginModule<User extends UserModel = UserModel,
+    StorageUser extends StorageUserModel = StorageUserModel> {
     public static forRoot(
         config: Partial<IUniFirebaseLoginConfig> = {},
     ): ModuleWithProviders<UniFirebaseLoginModule> {
-        const mergedConfig = Object.assign(
-            new UniFirebaseLoginConfigDefaults(),
-            config,
-        );
         return {
             ngModule: UniFirebaseLoginModule,
             providers: [
-                { provide: UniFirebaseLoginConfig, useValue: mergedConfig },
+                {provide: UniFirebaseLoginConfig, useValue: config},
             ],
         };
     }
@@ -37,7 +28,7 @@ export class UniFirebaseLoginModule<
     public static forChild(): ModuleWithProviders<UniFirebaseLoginModule> {
         return {
             ngModule: UniFirebaseLoginModule,
-            providers: [{ provide: UniFirebaseLoginConfig }],
+            providers: [{provide: UniFirebaseLoginConfigProvider}],
         };
     }
 
@@ -46,7 +37,7 @@ export class UniFirebaseLoginModule<
     ) {
         if (parentModule) {
             throw new Error(
-                "UniFirebaseLoginModule is already loaded. Import it in the AppModule only",
+                'UniFirebaseLoginModule is already loaded. Import it in the AppModule only',
             );
         }
     }

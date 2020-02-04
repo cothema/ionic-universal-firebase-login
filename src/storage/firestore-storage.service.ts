@@ -1,27 +1,29 @@
-import { Injectable } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/auth";
-import {
-    AngularFirestore,
-    AngularFirestoreDocument,
-} from "@angular/fire/firestore";
-import * as firebase from "firebase";
-import { Observable, of } from "rxjs";
-import { switchMap } from "rxjs/operators";
-import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
-import { StorageUserModel } from "../model/storage-user-model";
-import { UserModel } from "../model/user-model";
-import { IStorageProvider } from "./i-storage-provider";
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreDocument, } from '@angular/fire/firestore';
+import * as firebase from 'firebase';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
+import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
+import { StorageUserModel } from '../model/storage-user-model';
+import { UserModel } from '../model/user-model';
+import { IStorageProvider } from './i-storage-provider';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class FirestoreStorage<User extends UserModel = UserModel>
     implements IStorageProvider<User> {
+    protected config: UniFirebaseLoginConfig;
+
     public constructor(
         protected angularFireAuth: AngularFireAuth,
         protected angularFirestore: AngularFirestore,
-        protected config: UniFirebaseLoginConfig,
-    ) {}
+        configProvider: UniFirebaseLoginConfigProvider,
+    ) {
+        this.config = configProvider.config;
+    }
 
     public async updateStoredDataByUser(user: User): Promise<void> {
         if (user.uid) {
@@ -35,7 +37,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
                 merge: true,
             });
         } else {
-            throw new Error("Firebase user has no UID.");
+            throw new Error('Firebase user has no UID.');
         }
     }
 
@@ -43,7 +45,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         userUid: string,
     ): AngularFirestoreDocument<StorageUserModel> {
         if (this.config.storageUserTable === null) {
-            throw new Error("userTable is not specified!");
+            throw new Error('userTable is not specified!');
         }
 
         return this.angularFirestore
@@ -65,7 +67,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
                 merge: true,
             });
         } else {
-            throw new Error("Firebase user has no UID.");
+            throw new Error('Firebase user has no UID.');
         }
     }
 
