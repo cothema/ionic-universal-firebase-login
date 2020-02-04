@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { Observable, Subscriber } from 'rxjs';
-import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
 import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
+import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
 import { UserModel } from '../model/user-model';
 import { IStorageProvider } from './i-storage-provider';
 
@@ -34,6 +34,7 @@ export class InMemoryStorage<User extends UserModel = UserModel>
                 this.userData,
                 this.config.storageUserFactoryFunc(storageUser),
             );
+            this.onUserDataChanged();
         } else {
             throw new Error('Firebase user has no UID.');
         }
