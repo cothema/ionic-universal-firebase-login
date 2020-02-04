@@ -8,7 +8,6 @@ import * as firebase from "firebase";
 import { Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
-import { StorageUserModel } from "../model/storage-user-model";
 import { UserModel } from "../model/user-model";
 import { AbstractStorage } from "./abstract-storage";
 import { IStorageProvider } from "./i-storage-provider";
@@ -31,11 +30,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         if (user.uid) {
             const userRef = this.getUserRef(user.uid);
 
-            const data = this.config.storageUserFactoryFunc(
-                this.config.mapUserToStorageFunc(user),
-            );
-
-            await userRef.set(JSON.parse(JSON.stringify(data)), {
+            await userRef.set(JSON.parse(JSON.stringify(user)), {
                 merge: true,
             });
         } else {
@@ -43,9 +38,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         }
     }
 
-    public getUserRef(
-        userUid: string,
-    ): AngularFirestoreDocument<StorageUserModel> {
+    public getUserRef(userUid: string): AngularFirestoreDocument<UserModel> {
         if (this.config.storageUserTable === null) {
             throw new Error("userTable is not specified!");
         }
@@ -61,9 +54,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         if (firebaseUser.uid) {
             const userRef = this.getUserRef(firebaseUser.uid);
 
-            const data = this.config.storageUserFactoryFunc(
-                this.config.mapFirebaseUserToStorageFunc(firebaseUser),
-            );
+            const data = this.config.mapFirebaseUserToStorageFunc(firebaseUser);
 
             await userRef.set(JSON.parse(JSON.stringify(data)), {
                 merge: true,
@@ -74,13 +65,11 @@ export class FirestoreStorage<User extends UserModel = UserModel>
     }
 
     protected fetchUserFromStorageByFirebaseUser(
-        user: User,
+        user: firebase.User,
     ): Observable<User | null> {
         // User is logged in
         return this.angularFirestore
-            .doc<StorageUserModel>(
-                `${this.config.storageUserTable}/${user.uid}`,
-            )
+            .doc<UserModel>(`${this.config.storageUserTable}/${user.uid}`)
             .valueChanges()
             .pipe(
                 switchMap((userFirebase: any) => {

@@ -65,39 +65,20 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { FacebookAuthModule, GoogleAuthModule, UniFirebaseLoginModule } from "ionic-universal-firebase-login";
 import { environment } from "../environments/environment";
-import { FirestorePlayer } from "./model/firestore-player.model";
 import { Player } from "./model/player.model";
 import * as firebase from "firebase";
 
-export function mapUserToStorageFunc(user: Player) {
-    return storageUserFactoryFunc({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        lang: user.lang,
-        musicEnabled: user.musicEnabled,
-        nickname: user.nickname,
-    });
-}
-
 export function mapFirebaseUserToStorageFunc(user: firebase.User) {
-    return storageUserFactoryFunc({
+    return {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
         photoURL: user.photoURL,
-    });
+    };
 }
 
 export function userFactoryFunc(): Player {
     return new Player();
-}
-
-export function storageUserFactoryFunc(
-    data: Partial<FirestorePlayer>,
-): FirestorePlayer {
-    return new FirestorePlayer(data);
 }
 
 @NgModule({
@@ -110,9 +91,7 @@ export function storageUserFactoryFunc(
             storageUserTable: "players",
             signInPage: "login",
             userFactoryFunc,
-            mapFirebaseUserToStorageFunc,
-            storageUserFactoryFunc,
-            mapUserToStorageFunc,
+            mapFirebaseUserToStorageFunc
         }),
         GoogleAuthModule,
         FacebookAuthModule,

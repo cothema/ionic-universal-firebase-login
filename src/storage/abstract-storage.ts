@@ -1,6 +1,6 @@
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as firebase from "firebase";
-import { Observable, of } from "rxjs";
+import { Observable, Subscriber } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
@@ -24,25 +24,29 @@ export abstract class AbstractStorage<User extends UserModel = UserModel>
         firebaseUser: firebase.User,
     ): Promise<void>;
 
-    public async fetchUser(): Promise<User | null> {
-        return this.subscribeUser().toPromise();
-    }
-
     public subscribeUser(): Observable<User | null> {
         // Get the auth state, then fetch the Firestore user document or return null
-        return this.angularFireAuth.authState.pipe(
-            switchMap((user: any) => {
-                if (user) {
-                    this.fetchUserFromStorageByFirebaseUser(user);
-                }
-                // Logged out
-                return of(null);
-            }),
-        ) as Observable<User | null>;
+        return new Observable<User>((subscriber: Subscriber<User | null>) => {
+            this.angularFireAuth.authState.pipe(
+                switchMap((user: any) => {
+                    if (user) {
+                        this.fetchUserFromStorageByFirebaseUser(user).subscribe(
+                            result => {
+                                subscriber.next(result);
+                            },
+                        );
+                    } else {
+                        // Logged out
+                        subscriber.next(null);
+                    }
+                    return user;
+                }),
+            );
+        });
     }
 
     protected abstract fetchUserFromStorageByFirebaseUser(
-        user: User,
+        user: firebase.User,
     ): Observable<User | null>;
 
     /**

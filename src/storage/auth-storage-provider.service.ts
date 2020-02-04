@@ -6,7 +6,7 @@ import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-con
 import { UserModel } from "../model/user-model";
 import { FirestoreStorage } from "./firestore-storage";
 import { IStorageProvider } from "./i-storage-provider";
-import { InMemoryStorage } from "./in-memory-storage";
+import { NoMemoryStorage } from "./no-memory-storage.service";
 
 @Injectable({
     providedIn: "root",
@@ -16,7 +16,7 @@ export class AuthStorageProvider<User extends UserModel = UserModel> {
 
     public constructor(
         protected firestoreStorage: FirestoreStorage<User>,
-        protected inMemoryStorage: InMemoryStorage<User>,
+        protected inMemoryStorage: NoMemoryStorage<User>,
         configProvider: UniFirebaseLoginConfigProvider,
     ) {
         this.config = configProvider.config;

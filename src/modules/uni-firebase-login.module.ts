@@ -6,7 +6,6 @@ import {
 } from "@angular/core";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
-import { StorageUserModel } from "../model/storage-user-model";
 import { UserModel } from "../model/user-model";
 import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config";
 
@@ -16,10 +15,7 @@ import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config
     imports: [],
     providers: [],
 })
-export class UniFirebaseLoginModule<
-    User extends UserModel = UserModel,
-    StorageUser extends StorageUserModel = StorageUserModel
-> {
+export class UniFirebaseLoginModule<User extends UserModel = UserModel> {
     public static forRoot(
         config: Partial<IUniFirebaseLoginConfig> = {},
     ): ModuleWithProviders<UniFirebaseLoginModule> {

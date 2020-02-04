@@ -1,12 +1,7 @@
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { Observable } from "rxjs";
 
 export interface IStorageProvider<User> {
-    /**
-     * Fetch user profile data.
-     */
-    fetchUser(): Promise<User | null>;
-
     /**
      * Fetch user profile data and subscribe user changes.
      */
@@ -24,5 +19,5 @@ export interface IStorageProvider<User> {
      *
      * @param firebaseUser
      */
-    updateStoredDataByFirebaseUser(firebaseUser: firebase.User): Promise<void>;
+    updateStoredDataByFirebaseUser(firebaseUser: FirebaseUser): Promise<void>;
 }

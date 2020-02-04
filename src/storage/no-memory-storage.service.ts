@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as firebase from "firebase";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
 import { UserModel } from "../model/user-model";
 import { AbstractStorage } from "./abstract-storage";
@@ -10,13 +10,9 @@ import { IStorageProvider } from "./i-storage-provider";
 @Injectable({
     providedIn: "root",
 })
-export class InMemoryStorage<User extends UserModel = UserModel>
+export class NoMemoryStorage<User extends UserModel = UserModel>
     extends AbstractStorage<User>
     implements IStorageProvider<User> {
-    private userData: BehaviorSubject<User | null> = new BehaviorSubject(
-        null as User | null,
-    );
-
     public constructor(
         angularFireAuth: AngularFireAuth,
         configProvider: UniFirebaseLoginConfigProvider,
@@ -25,26 +21,23 @@ export class InMemoryStorage<User extends UserModel = UserModel>
     }
 
     public async updateStoredDataByUser(user: User): Promise<void> {
-        this.userData.next(user);
+        // No memory, just mock
     }
 
     public async updateStoredDataByFirebaseUser(
-        storageUser: firebase.User,
+        firebaseUser: firebase.User,
     ): Promise<void> {
-        if (storageUser.uid) {
-            this.userData.next(
-                this.config.storageUserFactoryFunc(storageUser) as User,
-            );
-        } else {
-            throw new Error("Firebase user has no UID.");
-        }
+        // No memory, just mock
     }
 
     protected fetchUserFromStorageByFirebaseUser(
-        user: User,
+        user: firebase.User,
     ): Observable<User | null> {
         return new Observable(subscriber => {
-            subscriber.next(this.userData.getValue());
+            console.log(this.config.mapFirebaseUserToStorageFunc(user));
+            subscriber.next(
+                this.config.mapFirebaseUserToStorageFunc(user) as User,
+            );
             subscriber.complete();
         });
     }

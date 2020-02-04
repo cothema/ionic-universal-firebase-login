@@ -2,13 +2,12 @@
 export * from "./guards/auth-guard";
 
 // Model
-export * from "./model/storage-user-model";
 export * from "./model/user-model";
 
 // Storage
 export * from "./storage/auth-storage-provider.service";
 export * from "./storage/firestore-storage";
-export * from "./storage/in-memory-storage";
+export * from "./storage/no-memory-storage.service";
 
 // Providers
 export * from "./providers/abstract-auth";
