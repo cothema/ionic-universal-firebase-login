@@ -30,10 +30,7 @@ export class InMemoryStorage<User extends UserModel = UserModel>
         storageUser: firebase.User,
     ): Promise<void> {
         if (storageUser.uid) {
-            Object.assign(
-                this.userData,
-                this.config.storageUserFactoryFunc(storageUser),
-            );
+            this.userData = this.config.storageUserFactoryFunc(storageUser) as User;
             this.onUserDataChanged();
         } else {
             throw new Error('Firebase user has no UID.');
