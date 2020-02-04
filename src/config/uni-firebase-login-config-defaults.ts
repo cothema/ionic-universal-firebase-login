@@ -1,4 +1,4 @@
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { UserModel } from "../model/user-model";
 import { IAuthProviderOptions } from "../services/i-auth-provider-options";
 import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config";
@@ -12,8 +12,8 @@ export class UniFirebaseLoginConfigDefaults<User extends UserModel = UserModel>
     public providers: IAuthProviderOptions = {};
     public userFactoryFunc: () => User = () => new UserModel() as User;
     public mapFirebaseUserToStorageFunc: (
-        firebaseUser: firebase.User,
-    ) => User = (firebaseUser: firebase.User) => {
+        firebaseUser: FirebaseUser,
+    ) => User = (firebaseUser: FirebaseUser) => {
         return new UserModel({
             displayName: firebaseUser.displayName,
             email: firebaseUser.email,

@@ -20,4 +20,8 @@ export interface IStorageProvider<User> {
      * @param firebaseUser
      */
     updateStoredDataByFirebaseUser(firebaseUser: FirebaseUser): Promise<void>;
+
+    fetchUserFromStorageByFirebaseUser(
+        user: FirebaseUser,
+    ): Observable<User | null>;
 }

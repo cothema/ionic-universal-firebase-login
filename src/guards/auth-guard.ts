@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/auth";
 import {
     ActivatedRouteSnapshot,
     CanActivate,
@@ -7,6 +6,7 @@ import {
     Router,
     RouterStateSnapshot,
 } from "@angular/router";
+import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
@@ -23,38 +23,35 @@ export class AuthGuard<User extends UserModel = UserModel>
     public constructor(
         protected auth: BaseAuthService<User>,
         protected router: Router,
-        protected angularFireAuth: AngularFireAuth,
         configProvider: UniFirebaseLoginConfigProvider,
     ) {
         this.config = configProvider.config;
     }
 
-    public async canActivate(
+    public canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
-    ): Promise<boolean> {
-        return this.angularFireAuth.authState
-            .pipe(
-                take(1),
-                map(user => !!user), // Map to boolean
-                tap(loggedIn => {
-                    if (!loggedIn) {
-                        // Access denied
-                        const redirectTo = this.config.signInPage;
-                        console.log(
-                            `Insufficient permissions, redirecting to: ${redirectTo}`,
-                        );
-                        return this.router.navigate([redirectTo]);
-                    }
-                }),
-            )
-            .toPromise();
+    ): Observable<boolean> {
+        return this.user$.pipe(
+            take(1),
+            map(user => !!user), // Map to boolean
+            tap(loggedIn => {
+                if (!loggedIn) {
+                    // Access denied
+                    const redirectTo = this.config.signInPage;
+                    console.log(
+                        `Insufficient permissions, redirecting to: ${redirectTo}`,
+                    );
+                    return this.router.navigate([redirectTo]);
+                }
+            }),
+        );
     }
 
     public canActivateChild(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
-    ): Promise<boolean> {
+    ): Observable<boolean> {
         return this.canActivate(next, state);
     }
 }

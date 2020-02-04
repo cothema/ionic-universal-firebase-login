@@ -1,5 +1,5 @@
 import { Injectable, Optional } from "@angular/core";
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { AnonymousAuth } from "../modules/anonymous/anonymous-auth";
 import { EmailAuth } from "../modules/email/email-auth";
 import { FacebookAuth } from "../modules/facebook/facebook-auth";
@@ -48,7 +48,7 @@ export class AuthProvider {
         return null;
     }
 
-    public getProvidersByUser(user: firebase.User): IAuthProvider[] {
+    public getProvidersByUser(user: FirebaseUser): IAuthProvider[] {
         if (user.isAnonymous) {
             return [this.authAnonymous];
         }

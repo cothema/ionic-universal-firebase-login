@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
+import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import { Platform } from "@ionic/angular";
-import * as firebase from "firebase";
+import { auth as firebaseAuth, User as FirebaseUser } from "firebase";
 import { auth } from "firebase/app";
 import { Observable } from "rxjs";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
@@ -17,16 +18,31 @@ import { IAuthService } from "./i-auth-service";
 })
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
+    public get user(): User | null {
+        return this._user;
+    }
+
+    public get userInitialized() {
+        return this._userInitialized;
+    }
+
+    public get currentFirebaseUser(): FirebaseUser | null {
+        return firebaseAuth().currentUser;
+    }
     protected config: UniFirebaseLoginConfig;
+    protected _user: User | null = null;
+    protected _userInitialized: boolean = false;
 
     public constructor(
         protected router: Router,
         protected platform: Platform,
         protected authProvider: AuthProvider,
         protected authStorageProvider: AuthStorageProvider<User>,
+        protected angularFireAuth: AngularFireAuth,
         configProvider: UniFirebaseLoginConfigProvider,
     ) {
         this.config = configProvider.config;
+        this.subscribeUserChanges();
     }
 
     public async signInByProvider(
@@ -143,10 +159,6 @@ export class BaseAuthService<User extends UserModel = UserModel>
         );
     }
 
-    public get currentFirebaseUser(): firebase.User | null {
-        return firebase.auth().currentUser;
-    }
-
     /**
      * Handle sign out request
      */
@@ -191,5 +203,22 @@ export class BaseAuthService<User extends UserModel = UserModel>
             console.log("Redirect ", this.config.afterSignInPage);
             await this.router.navigate([this.config.afterSignInPage]);
         }
+    }
+
+    private subscribeUserChanges(): void {
+        this.angularFireAuth.user.subscribe((user: any) => {
+            this._userInitialized = true;
+            if (user) {
+                this.authStorageProvider
+                    .getProvider()
+                    .fetchUserFromStorageByFirebaseUser(user)
+                    .subscribe(result => {
+                        this._user = result;
+                    });
+            } else {
+                // Logged out
+                this._user = null;
+            }
+        });
     }
 }

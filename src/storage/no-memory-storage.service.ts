@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { Observable } from "rxjs";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
 import { UserModel } from "../model/user-model";
@@ -25,16 +25,15 @@ export class NoMemoryStorage<User extends UserModel = UserModel>
     }
 
     public async updateStoredDataByFirebaseUser(
-        firebaseUser: firebase.User,
+        firebaseUser: FirebaseUser,
     ): Promise<void> {
         // No memory, just mock
     }
 
-    protected fetchUserFromStorageByFirebaseUser(
-        user: firebase.User,
+    public fetchUserFromStorageByFirebaseUser(
+        user: FirebaseUser,
     ): Observable<User | null> {
         return new Observable(subscriber => {
-            console.log(this.config.mapFirebaseUserToStorageFunc(user));
             subscriber.next(
                 this.config.mapFirebaseUserToStorageFunc(user) as User,
             );

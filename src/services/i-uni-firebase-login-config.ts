@@ -1,4 +1,4 @@
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { UserModel } from "../model/user-model";
 import { IAuthProviderOptions } from "./i-auth-provider-options";
 
@@ -9,7 +9,5 @@ export interface IUniFirebaseLoginConfig<User extends UserModel = UserModel> {
     storageUserTable: string | null;
     providers: IAuthProviderOptions;
     userFactoryFunc: () => User;
-    mapFirebaseUserToStorageFunc: (
-        firebaseUser: firebase.User,
-    ) => Partial<User>;
+    mapFirebaseUserToStorageFunc: (firebaseUser: FirebaseUser) => Partial<User>;
 }

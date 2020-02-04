@@ -4,7 +4,7 @@ import {
     AngularFirestore,
     AngularFirestoreDocument,
 } from "@angular/fire/firestore";
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
@@ -49,7 +49,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
     }
 
     public async updateStoredDataByFirebaseUser(
-        firebaseUser: firebase.User,
+        firebaseUser: FirebaseUser,
     ): Promise<void> {
         if (firebaseUser.uid) {
             const userRef = this.getUserRef(firebaseUser.uid);
@@ -64,8 +64,8 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         }
     }
 
-    protected fetchUserFromStorageByFirebaseUser(
-        user: firebase.User,
+    public fetchUserFromStorageByFirebaseUser(
+        user: FirebaseUser,
     ): Observable<User | null> {
         // User is logged in
         return this.angularFirestore

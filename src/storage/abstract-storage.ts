@@ -1,5 +1,5 @@
 import { AngularFireAuth } from "@angular/fire/auth";
-import * as firebase from "firebase";
+import { User as FirebaseUser } from "firebase";
 import { Observable, Subscriber } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
@@ -21,7 +21,7 @@ export abstract class AbstractStorage<User extends UserModel = UserModel>
     public abstract async updateStoredDataByUser(user: User): Promise<void>;
 
     public abstract async updateStoredDataByFirebaseUser(
-        firebaseUser: firebase.User,
+        firebaseUser: FirebaseUser,
     ): Promise<void>;
 
     public subscribeUser(): Observable<User | null> {
@@ -45,8 +45,8 @@ export abstract class AbstractStorage<User extends UserModel = UserModel>
         });
     }
 
-    protected abstract fetchUserFromStorageByFirebaseUser(
-        user: firebase.User,
+    public abstract fetchUserFromStorageByFirebaseUser(
+        user: FirebaseUser,
     ): Observable<User | null>;
 
     /**
