@@ -1,10 +1,14 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf, } from '@angular/core';
-import { UniFirebaseLoginConfigDefaults } from '../config/uni-firebase-login-config-defaults';
-import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
-import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
-import { StorageUserModel } from '../model/storage-user-model';
-import { UserModel } from '../model/user-model';
-import { IUniFirebaseLoginConfig } from '../services/i-uni-firebase-login-config';
+import {
+    ModuleWithProviders,
+    NgModule,
+    Optional,
+    SkipSelf,
+} from "@angular/core";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
+import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
+import { StorageUserModel } from "../model/storage-user-model";
+import { UserModel } from "../model/user-model";
+import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config";
 
 @NgModule({
     declarations: [],
@@ -12,23 +16,23 @@ import { IUniFirebaseLoginConfig } from '../services/i-uni-firebase-login-config
     imports: [],
     providers: [],
 })
-export class UniFirebaseLoginModule<User extends UserModel = UserModel,
-    StorageUser extends StorageUserModel = StorageUserModel> {
+export class UniFirebaseLoginModule<
+    User extends UserModel = UserModel,
+    StorageUser extends StorageUserModel = StorageUserModel
+> {
     public static forRoot(
         config: Partial<IUniFirebaseLoginConfig> = {},
     ): ModuleWithProviders<UniFirebaseLoginModule> {
         return {
             ngModule: UniFirebaseLoginModule,
-            providers: [
-                {provide: UniFirebaseLoginConfig, useValue: config},
-            ],
+            providers: [{ provide: UniFirebaseLoginConfig, useValue: config }],
         };
     }
 
     public static forChild(): ModuleWithProviders<UniFirebaseLoginModule> {
         return {
             ngModule: UniFirebaseLoginModule,
-            providers: [{provide: UniFirebaseLoginConfigProvider}],
+            providers: [{ provide: UniFirebaseLoginConfigProvider }],
         };
     }
 
@@ -37,7 +41,7 @@ export class UniFirebaseLoginModule<User extends UserModel = UserModel,
     ) {
         if (parentModule) {
             throw new Error(
-                'UniFirebaseLoginModule is already loaded. Import it in the AppModule only',
+                "UniFirebaseLoginModule is already loaded. Import it in the AppModule only",
             );
         }
     }

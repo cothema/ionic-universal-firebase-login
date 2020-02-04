@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, } from '@angular/router';
 import { map, take, tap } from 'rxjs/operators';
-import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
 import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
+import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
 import { UserModel } from '../model/user-model';
 import { BaseAuthService } from '../services/base-auth-service';
 
@@ -16,6 +17,7 @@ export class AuthGuard<User extends UserModel = UserModel>
     public constructor(
         protected auth: BaseAuthService<User>,
         protected router: Router,
+        protected angularFireAuth: AngularFireAuth,
         configProvider: UniFirebaseLoginConfigProvider,
     ) {
         this.config = configProvider.config;
@@ -25,9 +27,7 @@ export class AuthGuard<User extends UserModel = UserModel>
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
     ): Promise<boolean> {
-        const user$ = this.auth.getUser();
-
-        return user$
+        return this.angularFireAuth.authState
             .pipe(
                 take(1),
                 map(user => !!user), // Map to boolean

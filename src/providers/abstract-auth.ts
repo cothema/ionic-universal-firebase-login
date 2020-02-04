@@ -1,19 +1,19 @@
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Platform } from '@ionic/angular';
-import { auth } from 'firebase';
-import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
-import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
-import { IAuthProvider } from './i-auth-provider';
+import { AngularFireAuth } from "@angular/fire/auth";
+import { Platform } from "@ionic/angular";
+import { auth } from "firebase";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
+import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
+import { IAuthProvider } from "./i-auth-provider";
 
 export abstract class AbstractAuth implements IAuthProvider {
     public abstract readonly providerKey:
-        | 'anonymous'
-        | 'email'
-        | 'facebook'
-        | 'github'
-        | 'google'
-        | 'phone'
-        | 'twitter';
+        | "anonymous"
+        | "email"
+        | "facebook"
+        | "github"
+        | "google"
+        | "phone"
+        | "twitter";
     public readonly defaultOptions: any = {};
     protected config: UniFirebaseLoginConfig;
 
@@ -31,7 +31,7 @@ export abstract class AbstractAuth implements IAuthProvider {
     ): Promise<auth.UserCredential | null>;
 
     public handleLogin(options: any = {}): Promise<auth.UserCredential | null> {
-        if (this.platform.is('cordova')) {
+        if (this.platform.is("cordova")) {
             return this.handleNativeLogin(options);
         } else {
             return this.handleBrowserLogin();
@@ -40,7 +40,7 @@ export abstract class AbstractAuth implements IAuthProvider {
 
     public async handleNativeLogout(): Promise<void> {
         if (this.angularFireAuth.auth.currentUser === null) {
-            console.warn('Unknown currentUser!');
+            console.warn("Unknown currentUser!");
         }
     }
 
@@ -49,7 +49,7 @@ export abstract class AbstractAuth implements IAuthProvider {
     }
 
     public async handleSignOut(): Promise<void> {
-        if (this.platform.is('cordova')) {
+        if (this.platform.is("cordova")) {
             return this.handleNativeLogout();
         } else {
             return this.handleBrowserLogout();
@@ -61,15 +61,15 @@ export abstract class AbstractAuth implements IAuthProvider {
         const authX = this.angularFireAuth.auth;
 
         switch (this.defaultOptions.signInType) {
-            case 'popup':
+            case "popup":
                 return await authX.signInWithPopup(provider);
-            case 'redirect':
+            case "redirect":
                 await authX.signInWithRedirect(provider);
                 // TODO: implement redirect resolution: https://stackoverflow.com/questions/40219478/firebaseauth-googleauthprovider-signinwithredirect
-                throw new Error('Not implemented!');
+                throw new Error("Not implemented!");
         }
 
-        throw new Error('Invalid signInType!');
+        throw new Error("Invalid signInType!");
     }
 
     /**

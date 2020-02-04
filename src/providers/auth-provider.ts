@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable, Optional } from "@angular/core";
 import * as firebase from "firebase";
 import { AnonymousAuth } from "../modules/anonymous/anonymous-auth";
 import { EmailAuth } from "../modules/email/email-auth";

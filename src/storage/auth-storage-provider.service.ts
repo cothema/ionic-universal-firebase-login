@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Cacheable } from 'ngx-cacheable';
-import { Observable } from 'rxjs';
-import { UniFirebaseLoginConfigProvider } from '../config/uni-firebase-login-config-provider';
-import { UniFirebaseLoginConfig } from '../config/uni-firebase-login-config';
-import { UserModel } from '../model/user-model';
-import { FirestoreStorage } from './firestore-storage.service';
-import { IStorageProvider } from './i-storage-provider';
-import { InMemoryStorage } from './in-memory-storage.service';
+import { Injectable } from "@angular/core";
+import { Cacheable } from "ngx-cacheable";
+import { Observable } from "rxjs";
+import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
+import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
+import { UserModel } from "../model/user-model";
+import { FirestoreStorage } from "./firestore-storage";
+import { IStorageProvider } from "./i-storage-provider";
+import { InMemoryStorage } from "./in-memory-storage";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class AuthStorageProvider<User extends UserModel = UserModel> {
     protected config: UniFirebaseLoginConfig;
@@ -37,7 +37,7 @@ export class AuthStorageProvider<User extends UserModel = UserModel> {
             return storageProvider.subscribeUser();
         }
 
-        throw new Error('No storage provider found.');
+        throw new Error("No storage provider found.");
     }
 
     public getProvider(): IStorageProvider<User> {
@@ -45,11 +45,11 @@ export class AuthStorageProvider<User extends UserModel = UserModel> {
     }
 
     protected getProviderById(
-        providerId: false | 'firestore',
+        providerId: false | "firestore",
     ): IStorageProvider<User> {
         let provider;
         switch (providerId) {
-            case 'firestore':
+            case "firestore":
                 provider = this.firestoreStorage;
                 break;
             case false:
