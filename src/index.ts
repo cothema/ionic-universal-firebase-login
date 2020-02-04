@@ -1,5 +1,6 @@
 // Guards
 export * from "./guards/auth-guard";
+export * from "./guards/non-auth-guard";
 
 // Model
 export * from "./model/user-model";

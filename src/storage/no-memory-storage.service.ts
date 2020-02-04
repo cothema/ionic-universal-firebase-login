@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { User as FirebaseUser } from "firebase";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
 import { UserModel } from "../model/user-model";
 import { AbstractStorage } from "./abstract-storage";
@@ -13,6 +13,10 @@ import { IStorageProvider } from "./i-storage-provider";
 export class NoMemoryStorage<User extends UserModel = UserModel>
     extends AbstractStorage<User>
     implements IStorageProvider<User> {
+    protected user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
+        null,
+    );
+
     public constructor(
         angularFireAuth: AngularFireAuth,
         configProvider: UniFirebaseLoginConfigProvider,
@@ -21,23 +25,21 @@ export class NoMemoryStorage<User extends UserModel = UserModel>
     }
 
     public async updateStoredDataByUser(user: User): Promise<void> {
-        // No memory, just mock
+        this.user.next(user);
     }
 
     public async updateStoredDataByFirebaseUser(
         firebaseUser: FirebaseUser,
     ): Promise<void> {
-        // No memory, just mock
+        this.user.next(
+            this.config.mapFirebaseUserToStorageFunc(firebaseUser) as User,
+        );
     }
 
     public subscribeUserDataFromStorageByFirebaseUser(
         user: FirebaseUser,
     ): Observable<User | null> {
-        return new Observable(subscriber => {
-            subscriber.next(
-                this.config.mapFirebaseUserToStorageFunc(user) as User,
-            );
-            subscriber.complete();
-        });
+        this.user.next(this.config.mapFirebaseUserToStorageFunc(user) as User);
+        return this.user;
     }
 }

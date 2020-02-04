@@ -15,7 +15,7 @@ import { BaseAuthService } from "../services/base-auth-service";
 @Injectable({
     providedIn: "root",
 })
-export class AuthGuard<User extends UserModel = UserModel>
+export class NonAuthGuard<User extends UserModel = UserModel>
     implements CanActivate, CanActivateChild {
     protected config: UniFirebaseLoginConfig;
 
@@ -36,11 +36,11 @@ export class AuthGuard<User extends UserModel = UserModel>
                 if (initialized) {
                     this.auth.user$.subscribe(user => {
                         const loggedIn = !!user;
-                        if (!loggedIn) {
+                        if (loggedIn) {
                             // Access denied
-                            const redirectTo = this.config.signInPage;
+                            const redirectTo = this.config.afterSignInPage;
                             console.log(
-                                `Insufficient permissions, redirecting to: ${redirectTo}`,
+                                `Cannot be logged in on this page, redirecting to: ${redirectTo}`,
                             );
                             this.router.navigate([redirectTo]);
                             subscriber.next(false);
