@@ -110,7 +110,7 @@ It is required for native authentication on Android and iOS.
 Install with `npm`:
 
 ```bash
-npm install firebase @angular/fire ionic-universal-firebase-login ngx-cacheable
+npm install firebase @angular/fire ionic-universal-firebase-login
 ```
 
 - Go to https://firebase.google.com/ → **create a new Firebase project** 

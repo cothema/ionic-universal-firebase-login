@@ -64,7 +64,7 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         }
     }
 
-    public fetchUserFromStorageByFirebaseUser(
+    public subscribeUserDataFromStorageByFirebaseUser(
         user: FirebaseUser,
     ): Observable<User | null> {
         // User is logged in

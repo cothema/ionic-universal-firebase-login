@@ -1,6 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Cacheable } from "ngx-cacheable";
-import { Observable } from "rxjs";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
 import { UserModel } from "../model/user-model";
@@ -20,24 +18,6 @@ export class AuthStorageProvider<User extends UserModel = UserModel> {
         configProvider: UniFirebaseLoginConfigProvider,
     ) {
         this.config = configProvider.config;
-    }
-
-    /**
-     * Get user from cache if possible or from a storage
-     */
-    @Cacheable()
-    public getUser(): Observable<User | null> {
-        return this.getUserNonCached();
-    }
-
-    public getUserNonCached(): Observable<User | null> {
-        const storageProvider = this.getProvider();
-
-        if (storageProvider !== null) {
-            return storageProvider.subscribeUser();
-        }
-
-        throw new Error("No storage provider found.");
     }
 
     public getProvider(): IStorageProvider<User> {

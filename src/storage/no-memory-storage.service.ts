@@ -30,7 +30,7 @@ export class NoMemoryStorage<User extends UserModel = UserModel>
         // No memory, just mock
     }
 
-    public fetchUserFromStorageByFirebaseUser(
+    public subscribeUserDataFromStorageByFirebaseUser(
         user: FirebaseUser,
     ): Observable<User | null> {
         return new Observable(subscriber => {

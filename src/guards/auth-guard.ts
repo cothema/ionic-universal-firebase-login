@@ -32,20 +32,30 @@ export class AuthGuard<User extends UserModel = UserModel>
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
     ): Observable<boolean> {
-        return this.user$.pipe(
-            take(1),
-            map(user => !!user), // Map to boolean
-            tap(loggedIn => {
-                if (!loggedIn) {
-                    // Access denied
-                    const redirectTo = this.config.signInPage;
-                    console.log(
-                        `Insufficient permissions, redirecting to: ${redirectTo}`,
+        return new Observable(subscriber => {
+            this.auth.userInitialized$.subscribe((initialized: boolean) => {
+                if (initialized) {
+                    this.auth.user$.pipe(
+                        take(1),
+                        map(user => !!user), // Map to boolean
+                        tap(loggedIn => {
+                            if (!loggedIn) {
+                                // Access denied
+                                const redirectTo = this.config.signInPage;
+                                console.log(
+                                    `Insufficient permissions, redirecting to: ${redirectTo}`,
+                                );
+                                this.router.navigate([redirectTo]);
+                                subscriber.next(false);
+                            } else {
+                                subscriber.next(true);
+                            }
+                            subscriber.complete();
+                        }),
                     );
-                    return this.router.navigate([redirectTo]);
                 }
-            }),
-        );
+            });
+        });
     }
 
     public canActivateChild(

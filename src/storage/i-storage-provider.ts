@@ -3,11 +3,6 @@ import { Observable } from "rxjs";
 
 export interface IStorageProvider<User> {
     /**
-     * Fetch user profile data and subscribe user changes.
-     */
-    subscribeUser(): Observable<User | null>;
-
-    /**
      * Store user profile data for further use.
      *
      * @param user
@@ -21,7 +16,7 @@ export interface IStorageProvider<User> {
      */
     updateStoredDataByFirebaseUser(firebaseUser: FirebaseUser): Promise<void>;
 
-    fetchUserFromStorageByFirebaseUser(
+    subscribeUserDataFromStorageByFirebaseUser(
         user: FirebaseUser,
     ): Observable<User | null>;
 }

@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { Platform } from "@ionic/angular";
 import { auth as firebaseAuth, User as FirebaseUser } from "firebase";
 import { auth } from "firebase/app";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { UniFirebaseLoginConfig } from "../config/uni-firebase-login-config";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
 import { UserModel } from "../model/user-model";
@@ -19,19 +19,33 @@ import { IAuthService } from "./i-auth-service";
 export class BaseAuthService<User extends UserModel = UserModel>
     implements IAuthService {
     public get user(): User | null {
+        return this._user.getValue();
+    }
+
+    public get user$(): Observable<User | null> {
         return this._user;
     }
 
-    public get userInitialized() {
+    public get userInitialized(): boolean {
+        return this._userInitialized.getValue();
+    }
+
+    public get userInitialized$(): Observable<boolean> {
         return this._userInitialized;
     }
 
     public get currentFirebaseUser(): FirebaseUser | null {
         return firebaseAuth().currentUser;
     }
+
     protected config: UniFirebaseLoginConfig;
-    protected _user: User | null = null;
-    protected _userInitialized: boolean = false;
+    protected _user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
+        null,
+    );
+    protected _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject<
+        boolean
+    >(false);
+    private userDataSubscription: Subscription | undefined;
 
     public constructor(
         protected router: Router,
@@ -175,17 +189,6 @@ export class BaseAuthService<User extends UserModel = UserModel>
         await this.redirectAfterSignOut();
     }
 
-    /**
-     * Get user profile data
-     */
-    public getUser(fromCache: boolean = true): Observable<User | null> {
-        if (fromCache) {
-            return this.authStorageProvider.getUser();
-        } else {
-            return this.authStorageProvider.getUserNonCached();
-        }
-    }
-
     public async updateUserData(user: User) {
         await this.authStorageProvider
             .getProvider()
@@ -206,18 +209,23 @@ export class BaseAuthService<User extends UserModel = UserModel>
     }
 
     private subscribeUserChanges(): void {
-        this.angularFireAuth.user.subscribe((user: any) => {
-            this._userInitialized = true;
+        this.angularFireAuth.authState.subscribe((user: any) => {
             if (user) {
-                this.authStorageProvider
+                if (this.userDataSubscription) {
+                    this.userDataSubscription.unsubscribe();
+                }
+                this.userDataSubscription = this.authStorageProvider
                     .getProvider()
-                    .fetchUserFromStorageByFirebaseUser(user)
+                    .subscribeUserDataFromStorageByFirebaseUser(user)
                     .subscribe(result => {
-                        this._user = result;
+                        this._user.next(result);
                     });
             } else {
                 // Logged out
-                this._user = null;
+                this._user.next(null);
+            }
+            if (!this._userInitialized.getValue()) {
+                this._userInitialized.next(true);
             }
         });
     }
