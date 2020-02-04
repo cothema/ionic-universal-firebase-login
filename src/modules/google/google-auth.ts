@@ -15,7 +15,6 @@ export class GoogleAuth extends AbstractAuth implements IAuthProvider {
         offline: true,
         scopes: "profile email",
         signInType: "popup",
-        webClientId: "xxxxxx.apps.googleusercontent.com",
     };
 
     public constructor(

@@ -109,11 +109,6 @@ export function storageUserFactoryFunc(
             storage: "firestore",
             storageUserTable: "players",
             signInPage: "login",
-            providers: {
-                google: {
-                    webClientId: "xxxxx.apps.googleusercontent.com",
-                },
-            },
             userFactoryFunc,
             mapFirebaseUserToStorageFunc,
             storageUserFactoryFunc,
