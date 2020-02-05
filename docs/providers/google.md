@@ -27,7 +27,7 @@ ionic cordova plugin add cordova-plugin-googleplus --variable WEB_APPLICATION_CL
 
 ## Usage
 
-See [examples/](examples/) folder
+See [example project](https://github.com/cothema/ionic-firebase-login-tutorial)
 
 ## Frequent errors
 

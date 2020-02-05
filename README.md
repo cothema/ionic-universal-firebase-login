@@ -226,7 +226,7 @@ export class AppRoutingModule {
 
 ## Example implementations
 
-_See [examples/](examples/) folder_
+_See [example project](https://github.com/cothema/ionic-firebase-login-tutorial)_
 
 **Real use cases:**
 - https://gitlab.com/cothema/cook-pocket

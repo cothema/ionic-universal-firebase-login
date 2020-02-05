@@ -28,4 +28,4 @@ ionic cordova plugin add cordova-plugin-facebook4 --variable APP_ID="000000" --v
 
 ## Usage
 
-See [examples/](examples/) folder
+See [example project](https://github.com/cothema/ionic-firebase-login-tutorial)
