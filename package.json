@@ -1,6 +1,6 @@
 {
     "name": "ionic-universal-firebase-login",
-    "version": "0.2.8",
+    "version": "0.3.0",
     "description": "Easy to use universal (browser, Android, iOS) authentication via Firebase for Ionic",
     "author": "Miloš Havlíček",
     "license": "MIT",
