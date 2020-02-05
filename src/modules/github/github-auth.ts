@@ -22,13 +22,13 @@ export class GithubAuth extends AbstractAuth implements IAuthProvider {
         super(angularFireAuth, platform, config);
     }
 
-    public async handleNativeLogin(
+    public async signInNative(
         options: any,
     ): Promise<auth.UserCredential | null> {
         throw new Error("Method not implemented!");
     }
 
-    protected getBrowserLoginProvider() {
+    protected getBrowserSignInProvider() {
         return new auth.GithubAuthProvider();
     }
 }

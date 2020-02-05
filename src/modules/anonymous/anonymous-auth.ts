@@ -20,15 +20,15 @@ export class AnonymousAuth extends AbstractAuth implements IAuthProvider {
         super(angularFireAuth, platform, config);
     }
 
-    public async handleNativeLogin(options: any): Promise<auth.UserCredential> {
-        return this.handleBrowserLogin();
+    public async signInNative(options: any): Promise<auth.UserCredential> {
+        return this.signInBrowser();
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential> {
+    public async signInBrowser(): Promise<auth.UserCredential> {
         return await auth().signInAnonymously();
     }
 
-    protected getBrowserLoginProvider(): null {
+    protected getBrowserSignInProvider(): null {
         return null;
     }
 }

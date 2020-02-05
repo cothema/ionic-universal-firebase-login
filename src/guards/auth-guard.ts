@@ -41,10 +41,12 @@ export class AuthGuard<User extends UserModel = UserModel>
                     this.auth.user$.subscribe(user => {
                         const isLoggedIn = !!user;
                         if (!isLoggedIn) {
-                            this.handleAccessDeniedRedirect(route, state).then(() => {
-                                subscriber.next(false);
-                                subscriber.complete();
-                            });
+                            this.handleAccessDeniedRedirect(route, state).then(
+                                () => {
+                                    subscriber.next(false);
+                                    subscriber.complete();
+                                },
+                            );
                         } else {
                             subscriber.next(true);
                             subscriber.complete();
@@ -76,8 +78,8 @@ export class AuthGuard<User extends UserModel = UserModel>
             let routerExtras: NavigationExtras | undefined;
             if (this.config.redirectBack) {
                 routerExtras = {
-                    queryParams: {redirectBack: state.url}
-                }
+                    queryParams: { redirectBack: state.url },
+                };
             }
             await this.router.navigate([redirectTo], routerExtras);
         }

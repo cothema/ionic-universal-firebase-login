@@ -26,7 +26,7 @@ export class FacebookAuth extends AbstractAuth implements IAuthProvider {
         super(angularFireAuth, platform, config);
     }
 
-    public async handleNativeLogin(
+    public async signInNative(
         options: any,
     ): Promise<auth.UserCredential | null> {
         const mergedOptions = Object.assign({}, this.defaultOptions, options);
@@ -59,7 +59,7 @@ export class FacebookAuth extends AbstractAuth implements IAuthProvider {
         );
     }
 
-    protected getBrowserLoginProvider() {
+    protected getBrowserSignInProvider() {
         return new auth.FacebookAuthProvider();
     }
 }

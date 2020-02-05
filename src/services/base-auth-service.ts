@@ -42,7 +42,9 @@ export class BaseAuthService<User extends UserModel = UserModel>
     protected _user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
         null,
     );
-    protected _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    protected _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject<
+        boolean
+    >(false);
     private userDataSubscription: Subscription | undefined;
 
     public constructor(
@@ -61,7 +63,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
     public async signInByProvider(
         provider: IAuthProvider,
     ): Promise<auth.UserCredential | null> {
-        const credential = await provider.handleLogin();
+        const credential = await provider.signIn();
         if (
             this.config.storage !== false &&
             credential &&
@@ -75,45 +77,31 @@ export class BaseAuthService<User extends UserModel = UserModel>
     }
 
     public async signInAnonymously(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authAnonymous,
-        );
+        return this.signInByProvider(this.authProvider.authAnonymous);
     }
 
     public async signInViaEmail(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authEmail,
-        );
+        return this.signInByProvider(this.authProvider.authEmail);
     }
 
     public async signInViaFacebook(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authFacebook,
-        );
+        return this.signInByProvider(this.authProvider.authFacebook);
     }
 
     public async signInViaGithub(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authGithub,
-        );
+        return this.signInByProvider(this.authProvider.authGithub);
     }
 
     public async signInViaGoogle(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authGoogle,
-        );
+        return this.signInByProvider(this.authProvider.authGoogle);
     }
 
     public async signInViaPhone(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authPhone,
-        );
+        return this.signInByProvider(this.authProvider.authPhone);
     }
 
     public async signInViaTwitter(): Promise<auth.UserCredential | null> {
-        return this.signInByProvider(
-            this.authProvider.authTwitter,
-        );
+        return this.signInByProvider(this.authProvider.authTwitter);
     }
 
     /**
@@ -126,7 +114,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
             const providers = this.authProvider.getProvidersByUser(currentUser);
 
             for (const provider of providers) {
-                await provider.handleSignOut();
+                await provider.signOut();
             }
         }
     }

@@ -26,38 +26,40 @@ export abstract class AbstractAuth implements IAuthProvider {
         this.applyDefaultOptions();
     }
 
-    public abstract handleNativeLogin(
+    public abstract signInNative(
         options: any,
     ): Promise<auth.UserCredential | null>;
 
-    public handleLogin(options: any = {}): Promise<auth.UserCredential | null> {
+    public async signIn(
+        options: any = {},
+    ): Promise<auth.UserCredential | null> {
         if (this.platform.is("cordova")) {
-            return this.handleNativeLogin(options);
+            return this.signInNative(options);
         } else {
-            return this.handleBrowserLogin();
+            return this.signInBrowser();
         }
     }
 
-    public async handleNativeLogout(): Promise<void> {
+    public async signOutNative(): Promise<void> {
         if (this.angularFireAuth.auth.currentUser === null) {
             console.warn("Unknown currentUser!");
         }
     }
 
-    public async handleBrowserLogout(): Promise<void> {
+    public async signOutBrowser(): Promise<void> {
         return this.angularFireAuth.auth.signOut();
     }
 
-    public async handleSignOut(): Promise<void> {
+    public async signOut(): Promise<void> {
         if (this.platform.is("cordova")) {
-            return this.handleNativeLogout();
+            return this.signOutNative();
         } else {
-            return this.handleBrowserLogout();
+            return this.signOutBrowser();
         }
     }
 
-    public async handleBrowserLogin(): Promise<auth.UserCredential | null> {
-        const provider = this.getBrowserLoginProvider();
+    public async signInBrowser(): Promise<auth.UserCredential | null> {
+        const provider = this.getBrowserSignInProvider();
         const authX = this.angularFireAuth.auth;
 
         switch (this.defaultOptions.signInType) {
@@ -85,5 +87,5 @@ export abstract class AbstractAuth implements IAuthProvider {
         );
     }
 
-    protected abstract getBrowserLoginProvider(): any | null;
+    protected abstract getBrowserSignInProvider(): any | null;
 }

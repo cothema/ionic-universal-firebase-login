@@ -41,10 +41,12 @@ export class NonAuthGuard<User extends UserModel = UserModel>
                     this.auth.user$.subscribe(user => {
                         const isLoggedIn = !!user;
                         if (isLoggedIn) {
-                            this.handleAccessDeniedRedirect(route, state).then(() => {
-                                subscriber.next(false);
-                                subscriber.complete();
-                            });
+                            this.handleAccessDeniedRedirect(route, state).then(
+                                () => {
+                                    subscriber.next(false);
+                                    subscriber.complete();
+                                },
+                            );
                         } else {
                             subscriber.next(true);
                             subscriber.complete();
@@ -70,12 +72,10 @@ export class NonAuthGuard<User extends UserModel = UserModel>
 
         let queryParams: Params | undefined;
         if (this.config.redirectBack) {
-            queryParams = this.route
-                .snapshot
-                .queryParams;
+            queryParams = this.route.snapshot.queryParams;
         }
 
-        if (queryParams && queryParams["redirectBack"]) {
+        if (queryParams && queryParams.redirectBack) {
             console.log(`Redirect back: ${queryParams.redirectBack}`);
             await this.router.navigate([queryParams.redirectBack]);
         } else if (this.config.afterSignInPage) {

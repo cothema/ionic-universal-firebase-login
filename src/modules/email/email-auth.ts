@@ -22,13 +22,13 @@ export class EmailAuth extends AbstractAuth implements IAuthProvider {
         super(angularFireAuth, platform, config);
     }
 
-    public async handleNativeLogin(
+    public async signInNative(
         options: any,
     ): Promise<auth.UserCredential | null> {
-        return this.handleBrowserLogin();
+        return this.signInBrowser();
     }
 
-    protected getBrowserLoginProvider() {
+    protected getBrowserSignInProvider() {
         throw new auth.EmailAuthProvider();
     }
 }
