@@ -42,7 +42,9 @@ export class AuthGuard<User extends UserModel = UserModel>
                             console.log(
                                 `Insufficient permissions, redirecting to: ${redirectTo}`,
                             );
-                            this.router.navigate([redirectTo]);
+                            if (redirectTo) {
+                                this.router.navigate([redirectTo]);
+                            }
                             subscriber.next(false);
                         } else {
                             subscriber.next(true);
