@@ -7,9 +7,10 @@ export class UniFirebaseLoginConfigDefaults<User extends UserModel = UserModel>
     implements IUniFirebaseLoginConfig<User> {
     public afterSignInPage = "/";
     public signInPage = "/sign-in";
-    public storage: false | "firestore" = false;
+    public storage: "firestore" | false = false;
     public storageUserTable = "users";
     public providers: IAuthProviderOptions = {};
+    public redirectBack: boolean = true;
     public userFactoryFunc: () => User = () => new UserModel() as User;
     public mapFirebaseUserToStorageFunc: (
         firebaseUser: FirebaseUser,

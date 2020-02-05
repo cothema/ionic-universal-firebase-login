@@ -1,12 +1,9 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
-import {
-    AngularFirestore,
-    AngularFirestoreDocument,
-} from "@angular/fire/firestore";
+import { AngularFirestore, AngularFirestoreDocument, } from "@angular/fire/firestore";
 import { User as FirebaseUser } from "firebase";
 import { Observable } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { UniFirebaseLoginConfigProvider } from "../config/uni-firebase-login-config-provider";
 import { UserModel } from "../model/user-model";
 import { AbstractStorage } from "./abstract-storage";
@@ -38,14 +35,14 @@ export class FirestoreStorage<User extends UserModel = UserModel>
         }
     }
 
-    public getUserRef(userUid: string): AngularFirestoreDocument<UserModel> {
+    public getUserRef(userUid: string): AngularFirestoreDocument<User> {
         if (this.config.storageUserTable === null) {
             throw new Error("userTable is not specified!");
         }
 
         return this.angularFirestore
             .collection(this.config.storageUserTable)
-            .doc(userUid);
+            .doc<User>(userUid);
     }
 
     public async updateStoredDataByFirebaseUser(
@@ -67,21 +64,14 @@ export class FirestoreStorage<User extends UserModel = UserModel>
     public subscribeUserDataFromStorageByFirebaseUser(
         user: FirebaseUser,
     ): Observable<User | null> {
-        // User is logged in
-        return this.angularFirestore
-            .doc<UserModel>(`${this.config.storageUserTable}/${user.uid}`)
+        return this.getUserRef(user.uid)
             .valueChanges()
             .pipe(
-                switchMap((userFirebase: any) => {
-                    return new Observable(subscriber => {
-                        subscriber.next(
-                            Object.assign<User, any>(
-                                this.getNewUser(),
-                                userFirebase,
-                            ),
-                        );
-                        subscriber.complete();
-                    });
+                map((userFirebase: any) => {
+                    return Object.assign<User, any>(
+                        this.getNewUser(),
+                        userFirebase,
+                    );
                 }),
             ) as Observable<User>;
     }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Platform } from "@ionic/angular";
 import { auth as firebaseAuth, User as FirebaseUser } from "firebase";
 import { auth } from "firebase/app";
@@ -17,7 +17,7 @@ import { IAuthService } from "./i-auth-service";
     providedIn: "root",
 })
 export class BaseAuthService<User extends UserModel = UserModel>
-    implements IAuthService {
+    implements IAuthService<User> {
     public get user(): User | null {
         return this._user.getValue();
     }
@@ -42,13 +42,12 @@ export class BaseAuthService<User extends UserModel = UserModel>
     protected _user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
         null,
     );
-    protected _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject<
-        boolean
-    >(false);
+    protected _userInitialized: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private userDataSubscription: Subscription | undefined;
 
     public constructor(
         protected router: Router,
+        protected route: ActivatedRoute,
         protected platform: Platform,
         protected authProvider: AuthProvider,
         protected authStorageProvider: AuthStorageProvider<User>,
@@ -61,11 +60,7 @@ export class BaseAuthService<User extends UserModel = UserModel>
 
     public async signInByProvider(
         provider: IAuthProvider,
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
+    ): Promise<auth.UserCredential | null> {
         const credential = await provider.handleLogin();
         if (
             this.config.storage !== false &&
@@ -76,100 +71,48 @@ export class BaseAuthService<User extends UserModel = UserModel>
                 .getProvider()
                 .updateStoredDataByFirebaseUser(credential.user);
         }
-        await callbackBeforeRedirect(credential);
-        if (redirect) {
-            await this.redirectAfterLogin();
-        }
+        return credential;
     }
 
-    public async signInAnonymously(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInAnonymously(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authAnonymous,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
-    public async signInViaEmail(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInViaEmail(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authEmail,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
-    public async signInViaFacebook(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInViaFacebook(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authFacebook,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
-    public async signInViaGithub(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInViaGithub(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authGithub,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
-    public async signInViaGoogle(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInViaGoogle(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authGoogle,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
-    public async signInViaPhone(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInViaPhone(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authPhone,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
-    public async signInViaTwitter(
-        redirect: boolean = true,
-        callbackBeforeRedirect: (
-            credential: auth.UserCredential | null,
-        ) => Promise<void> | void = () => undefined,
-    ): Promise<void> {
-        await this.signInByProvider(
+    public async signInViaTwitter(): Promise<auth.UserCredential | null> {
+        return this.signInByProvider(
             this.authProvider.authTwitter,
-            redirect,
-            callbackBeforeRedirect,
         );
     }
 
@@ -186,26 +129,12 @@ export class BaseAuthService<User extends UserModel = UserModel>
                 await provider.handleSignOut();
             }
         }
-        await this.redirectAfterSignOut();
     }
 
     public async updateUserData(user: User) {
         await this.authStorageProvider
             .getProvider()
             .updateStoredDataByUser(user);
-    }
-
-    protected async redirectAfterSignOut() {
-        if (this.config.signInPage) {
-            await this.router.navigate([this.config.signInPage]);
-        }
-    }
-
-    protected async redirectAfterLogin() {
-        if (this.config.afterSignInPage) {
-            console.log("Redirect ", this.config.afterSignInPage);
-            await this.router.navigate([this.config.afterSignInPage]);
-        }
     }
 
     private subscribeUserChanges(): void {
@@ -217,16 +146,21 @@ export class BaseAuthService<User extends UserModel = UserModel>
                 this.userDataSubscription = this.authStorageProvider
                     .getProvider()
                     .subscribeUserDataFromStorageByFirebaseUser(user)
-                    .subscribe(result => {
-                        this._user.next(result);
+                    .subscribe((resultUser: User | null) => {
+                        this._user.next(resultUser);
+                        this.setUserInitializedIfNotAlready();
                     });
             } else {
                 // Logged out
                 this._user.next(null);
-            }
-            if (!this._userInitialized.getValue()) {
-                this._userInitialized.next(true);
+                this.setUserInitializedIfNotAlready();
             }
         });
+    }
+
+    private setUserInitializedIfNotAlready() {
+        if (!this._userInitialized.getValue()) {
+            this._userInitialized.next(true);
+        }
     }
 }

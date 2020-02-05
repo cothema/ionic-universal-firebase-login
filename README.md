@@ -51,6 +51,7 @@ Override or change `options` property of BaseAuthService
 | --- | --- | ---
 | afterSignInPage | "/" | Path where user will be redirected after successful sign in. If false, no redirect will be done.
 | providers | {} | List of provider configurations. See example configuration.
+| redirectBack | true | When true, user will be redirected back to requested router path after sign in
 | signInPage | "/sign-in" | Path where user will be redirected when sign in is required (and after logout). If false, no redirect will be done.
 | storage | false | You can store user profile data in Firestore ('firestore') or nowhere (false).
 | storageUserTable | "users" | If you specify storage, than this table name / key will be used.

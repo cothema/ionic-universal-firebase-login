@@ -1,4 +1,5 @@
 // Guards
+export * from "./guards/i-guard";
 export * from "./guards/auth-guard";
 export * from "./guards/non-auth-guard";
 
