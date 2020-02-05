@@ -103,6 +103,25 @@ export class AppModule {
 }
 ```
 
+**Usage in template:**
+``` typescript
+import { Component, OnInit } from "@angular/core";
+import { BaseAuthService } from "ionic-universal-firebase-login";
+
+@Component({
+  selector: "app-sample",
+  template: `
+    Username: {{ auth.user?.displayName }}
+    Email: {{ auth.user?.email }}
+  `,
+})
+export class SamplePage {
+  constructor(
+    public auth: BaseAuthService,
+  ) {}
+}
+```
+
 ## Installation
 
 - Before you start, be sure that you have signed your application.
