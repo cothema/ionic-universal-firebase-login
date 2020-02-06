@@ -224,6 +224,12 @@ export class AppRoutingModule {
 }
 ````
 
+## Video tutorial
+
+[![Youtube video Ionic Firebase Login Tutorial](http://img.youtube.com/vi/7PtAGS2P9UQ/0.jpg)](http://www.youtube.com/watch?v=7PtAGS2P9UQ "Ionic Firebase Login Tutorial")
+
+[Play tutorial on YouTube](http://www.youtube.com/watch?v=7PtAGS2P9UQ "Ionic Firebase Login Tutorial")
+
 ## Example implementations
 
 _See [example project](https://github.com/cothema/ionic-firebase-login-tutorial)_

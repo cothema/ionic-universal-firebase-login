@@ -29,6 +29,6 @@ export class EmailAuth extends AbstractAuth implements IAuthProvider {
     }
 
     protected getBrowserSignInProvider() {
-        throw new auth.EmailAuthProvider();
+        return new auth.EmailAuthProvider();
     }
 }
