@@ -4,23 +4,23 @@ import { IAuthProviderOptions } from "../services/i-auth-provider-options";
 import { IUniFirebaseLoginConfig } from "../services/i-uni-firebase-login-config";
 
 export class UniFirebaseLoginConfigDefaults<User extends UserModel = UserModel>
-    implements IUniFirebaseLoginConfig<User> {
-    public afterSignInPage = "/";
-    public signInPage = "/sign-in";
-    public storage: "firestore" | false = false;
-    public storageUserTable = "users";
-    public providers: IAuthProviderOptions = {};
-    public redirectBack: boolean = true;
-    public userFactoryFunc: () => User = () => new UserModel() as User;
-    public mapFirebaseUserToStorageFunc: (
-        firebaseUser: FirebaseUser,
-    ) => User = (firebaseUser: FirebaseUser) => {
-        return new UserModel({
-            displayName: firebaseUser.displayName,
-            email: firebaseUser.email,
-            phoneNumber: firebaseUser.phoneNumber,
-            photoURL: firebaseUser.photoURL,
-            uid: firebaseUser.uid,
-        }) as User;
-    };
+  implements IUniFirebaseLoginConfig<User> {
+  public afterSignInPage = "/";
+  public signInPage = "/sign-in";
+  public storage: "firestore" | false = false;
+  public storageUserTable = "users";
+  public providers: IAuthProviderOptions = {};
+  public redirectBack: boolean = true;
+  public userFactoryFunc: () => User = () => new UserModel() as User;
+  public mapFirebaseUserToStorageFunc: (firebaseUser: FirebaseUser) => User = (
+    firebaseUser: FirebaseUser,
+  ) => {
+    return new UserModel({
+      displayName: firebaseUser.displayName,
+      email: firebaseUser.email,
+      phoneNumber: firebaseUser.phoneNumber,
+      photoURL: firebaseUser.photoURL,
+      uid: firebaseUser.uid,
+    }) as User;
+  };
 }

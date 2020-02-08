@@ -9,26 +9,24 @@ import { IEmailAuthOptions } from "./i-email-auth-options";
 
 @Injectable()
 export class EmailAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerKey = "email";
-    public readonly defaultOptions: IEmailAuthOptions = {
-        signInType: "popup",
-    };
+  public readonly providerKey = "email";
+  public readonly defaultOptions: IEmailAuthOptions = {
+    signInType: "popup",
+  };
 
-    public constructor(
-        angularFireAuth: AngularFireAuth,
-        platform: Platform,
-        config: UniFirebaseLoginConfigProvider,
-    ) {
-        super(angularFireAuth, platform, config);
-    }
+  public constructor(
+    angularFireAuth: AngularFireAuth,
+    platform: Platform,
+    config: UniFirebaseLoginConfigProvider,
+  ) {
+    super(angularFireAuth, platform, config);
+  }
 
-    public async signInNative(
-        options: any,
-    ): Promise<auth.UserCredential | null> {
-        return this.signInBrowser();
-    }
+  public async signInNative(options: any): Promise<auth.UserCredential | null> {
+    return this.signInBrowser();
+  }
 
-    protected getBrowserSignInProvider() {
-        return new auth.EmailAuthProvider();
-    }
+  protected getBrowserSignInProvider() {
+    return new auth.EmailAuthProvider();
+  }
 }

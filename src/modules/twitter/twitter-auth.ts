@@ -8,24 +8,22 @@ import { IAuthProvider } from "../../providers/i-auth-provider";
 
 @Injectable()
 export class TwitterAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerKey = "twitter";
-    public readonly defaultOptions = {};
+  public readonly providerKey = "twitter";
+  public readonly defaultOptions = {};
 
-    public constructor(
-        angularFireAuth: AngularFireAuth,
-        platform: Platform,
-        config: UniFirebaseLoginConfigProvider,
-    ) {
-        super(angularFireAuth, platform, config);
-    }
+  public constructor(
+    angularFireAuth: AngularFireAuth,
+    platform: Platform,
+    config: UniFirebaseLoginConfigProvider,
+  ) {
+    super(angularFireAuth, platform, config);
+  }
 
-    public async signInNative(
-        options: any,
-    ): Promise<auth.UserCredential | null> {
-        throw new Error("Method not implemented!");
-    }
+  public async signInNative(options: any): Promise<auth.UserCredential | null> {
+    throw new Error("Method not implemented!");
+  }
 
-    protected getBrowserSignInProvider() {
-        return new auth.TwitterAuthProvider();
-    }
+  protected getBrowserSignInProvider() {
+    return new auth.TwitterAuthProvider();
+  }
 }

@@ -4,7 +4,7 @@ import { IonicModule } from "@ionic/angular";
 import { EmailAuth } from "./email-auth";
 
 @NgModule({
-    imports: [AngularFirestoreModule, IonicModule],
-    providers: [EmailAuth],
+  imports: [AngularFirestoreModule, IonicModule],
+  providers: [EmailAuth],
 })
 export class EmailAuthModule {}

@@ -6,7 +6,7 @@ import { IonicModule } from "@ionic/angular";
 import { FacebookAuth } from "./facebook-auth";
 
 @NgModule({
-    imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
-    providers: [FacebookAuth, Facebook],
+  imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
+  providers: [FacebookAuth, Facebook],
 })
 export class FacebookAuthModule {}

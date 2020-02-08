@@ -9,26 +9,26 @@ import { IAnonymousAuthOptions } from "./i-anonymous-auth-options";
 
 @Injectable()
 export class AnonymousAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerKey = "anonymous";
-    public readonly defaultOptions: IAnonymousAuthOptions = {};
+  public readonly providerKey = "anonymous";
+  public readonly defaultOptions: IAnonymousAuthOptions = {};
 
-    public constructor(
-        angularFireAuth: AngularFireAuth,
-        platform: Platform,
-        config: UniFirebaseLoginConfigProvider,
-    ) {
-        super(angularFireAuth, platform, config);
-    }
+  public constructor(
+    angularFireAuth: AngularFireAuth,
+    platform: Platform,
+    config: UniFirebaseLoginConfigProvider,
+  ) {
+    super(angularFireAuth, platform, config);
+  }
 
-    public async signInNative(options: any): Promise<auth.UserCredential> {
-        return this.signInBrowser();
-    }
+  public async signInNative(options: any): Promise<auth.UserCredential> {
+    return this.signInBrowser();
+  }
 
-    public async signInBrowser(): Promise<auth.UserCredential> {
-        return await auth().signInAnonymously();
-    }
+  public async signInBrowser(): Promise<auth.UserCredential> {
+    return await auth().signInAnonymously();
+  }
 
-    protected getBrowserSignInProvider(): null {
-        return null;
-    }
+  protected getBrowserSignInProvider(): null {
+    return null;
+  }
 }

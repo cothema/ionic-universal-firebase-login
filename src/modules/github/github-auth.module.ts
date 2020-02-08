@@ -5,7 +5,7 @@ import { IonicModule } from "@ionic/angular";
 import { GithubAuth } from "./github-auth";
 
 @NgModule({
-    imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
-    providers: [GithubAuth],
+  imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
+  providers: [GithubAuth],
 })
 export class GithubAuthModule {}

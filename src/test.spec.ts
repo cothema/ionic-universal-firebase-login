@@ -1,9 +1,9 @@
 import { TestBed } from "@angular/core/testing";
 
 describe("Example test", () => {
-    beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => TestBed.configureTestingModule({}));
 
-    it("test", () => {
-        expect(true).toBeTruthy();
-    });
+  it("test", () => {
+    expect(true).toBeTruthy();
+  });
 });

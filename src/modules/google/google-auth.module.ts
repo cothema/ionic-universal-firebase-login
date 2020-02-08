@@ -6,7 +6,7 @@ import { IonicModule } from "@ionic/angular";
 import { GoogleAuth } from "./google-auth";
 
 @NgModule({
-    imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
-    providers: [GoogleAuth, GooglePlus],
+  imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
+  providers: [GoogleAuth, GooglePlus],
 })
 export class GoogleAuthModule {}

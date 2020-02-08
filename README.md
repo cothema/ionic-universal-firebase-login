@@ -21,6 +21,12 @@ No more pain with login implementation troubles!
 
 **See documentation and guides on:** https://github.com/cothema/ionic-universal-firebase-login
 
+## Video tutorial
+
+[![Youtube video Ionic Firebase Login Tutorial](http://img.youtube.com/vi/7PtAGS2P9UQ/0.jpg)](http://www.youtube.com/watch?v=7PtAGS2P9UQ "Ionic Firebase Login Tutorial")
+
+[Play tutorial on YouTube](http://www.youtube.com/watch?v=7PtAGS2P9UQ "Ionic Firebase Login Tutorial")
+
 ## Supported providers
 - [Google - see guide](docs/providers/google.md)
 - [Facebook - see guide](docs/providers/facebook.md)
@@ -223,12 +229,6 @@ const routes: Routes = [
 export class AppRoutingModule {
 }
 ````
-
-## Video tutorial
-
-[![Youtube video Ionic Firebase Login Tutorial](http://img.youtube.com/vi/7PtAGS2P9UQ/0.jpg)](http://www.youtube.com/watch?v=7PtAGS2P9UQ "Ionic Firebase Login Tutorial")
-
-[Play tutorial on YouTube](http://www.youtube.com/watch?v=7PtAGS2P9UQ "Ionic Firebase Login Tutorial")
 
 ## Example implementations
 

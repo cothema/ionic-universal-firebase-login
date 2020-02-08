@@ -5,7 +5,7 @@ import { IonicModule } from "@ionic/angular";
 import { PhoneAuth } from "./phone-auth";
 
 @NgModule({
-    imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
-    providers: [PhoneAuth],
+  imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
+  providers: [PhoneAuth],
 })
 export class PhoneAuthModule {}

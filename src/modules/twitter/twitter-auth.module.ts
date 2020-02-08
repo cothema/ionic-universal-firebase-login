@@ -5,7 +5,7 @@ import { IonicModule } from "@ionic/angular";
 import { TwitterAuth } from "./twitter-auth";
 
 @NgModule({
-    imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
-    providers: [TwitterAuth],
+  imports: [AngularFirestoreModule, AngularFireAuthModule, IonicModule],
+  providers: [TwitterAuth],
 })
 export class TwitterAuthModule {}

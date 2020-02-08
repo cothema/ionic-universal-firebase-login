@@ -7,11 +7,11 @@ import { IPhoneAuthOptions } from "../modules/phone/i-phone-auth-options";
 import { ITwitterAuthOptions } from "../modules/twitter/i-twitter-auth-options";
 
 export interface IAuthProviderOptions {
-    anonymous?: Partial<IAnonymousAuthOptions>;
-    email?: Partial<IEmailAuthOptions>;
-    facebook?: Partial<IFacebookAuthOptions>;
-    google?: Partial<IGoogleAuthOptions>;
-    phone?: Partial<IPhoneAuthOptions>;
-    twitter?: Partial<ITwitterAuthOptions>;
-    github?: Partial<IGithubAuthOptions>;
+  anonymous?: Partial<IAnonymousAuthOptions>;
+  email?: Partial<IEmailAuthOptions>;
+  facebook?: Partial<IFacebookAuthOptions>;
+  google?: Partial<IGoogleAuthOptions>;
+  phone?: Partial<IPhoneAuthOptions>;
+  twitter?: Partial<ITwitterAuthOptions>;
+  github?: Partial<IGithubAuthOptions>;
 }

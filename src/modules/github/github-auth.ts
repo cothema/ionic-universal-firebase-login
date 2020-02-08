@@ -9,26 +9,24 @@ import { IGithubAuthOptions } from "./i-github-auth-options";
 
 @Injectable()
 export class GithubAuth extends AbstractAuth implements IAuthProvider {
-    public readonly providerKey = "github";
-    public readonly defaultOptions: IGithubAuthOptions = {
-        signInType: "popup",
-    };
+  public readonly providerKey = "github";
+  public readonly defaultOptions: IGithubAuthOptions = {
+    signInType: "popup",
+  };
 
-    public constructor(
-        angularFireAuth: AngularFireAuth,
-        platform: Platform,
-        config: UniFirebaseLoginConfigProvider,
-    ) {
-        super(angularFireAuth, platform, config);
-    }
+  public constructor(
+    angularFireAuth: AngularFireAuth,
+    platform: Platform,
+    config: UniFirebaseLoginConfigProvider,
+  ) {
+    super(angularFireAuth, platform, config);
+  }
 
-    public async signInNative(
-        options: any,
-    ): Promise<auth.UserCredential | null> {
-        throw new Error("Method not implemented!");
-    }
+  public async signInNative(options: any): Promise<auth.UserCredential | null> {
+    throw new Error("Method not implemented!");
+  }
 
-    protected getBrowserSignInProvider() {
-        return new auth.GithubAuthProvider();
-    }
+  protected getBrowserSignInProvider() {
+    return new auth.GithubAuthProvider();
+  }
 }
