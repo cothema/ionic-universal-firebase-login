@@ -1,39 +1,40 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "baseUrl": "./",
-        "declaration": true,
-        "downlevelIteration": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "lib": [
-            "es2018",
-            "es2017",
-            "es7",
-            "es6",
-            "dom"
-        ],
-        "module": "esnext",
-        "moduleResolution": "node",
-        "outDir": "./dist/out-tsc",
-        "rootDir": "./src",
-        "sourceMap": true,
-        "strict": true,
-        "target": "es2015",
-        "typeRoots": [
-            "node_modules/@types"
-        ]
-    },
-    "include": [
-        "src/**/*"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "lib": [
+      "es2018",
+      "es2017",
+      "es7",
+      "es6",
+      "dom"
     ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "pkg"
-    ],
-    "angularCompilerOptions": {
-        "fullTemplateTypeCheck": true,
-        "strictInjectionParameters": true
-    }
+    "module": "esnext",
+    "moduleResolution": "node",
+    "outDir": "./dist/out-tsc",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "pkg"
+  ],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "enableIvy": false
+  }
 }
