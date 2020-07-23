@@ -45,7 +45,7 @@
     "@angular/forms": "^9.0.0",
     "@angular/platform-browser": "^9.0.0",
     "@angular/platform-browser-dynamic": "^9.0.0",
-    "@angular/router": "^9.0.0",
+    "@angular/router": "^10.0.5",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@ionic-native/core": ">=5.19.1",
